@@ -115,8 +115,9 @@ float error_factor(NN *network, TD *train_data) {
 }
 
 /* Backpropagates the network and returns the error factor delta */
-void backpropagate(NN *network, TD *train_data, float learning_factor, unsigned int layer) {
+void backpropagate(NN *network, TD *train_data, float learning_factor, float momentum, unsigned int layer) {
     Neuron *neuron;
+    float error, delta, change;
     for (unsigned int test = 0; test < train_data->data_count; test++) {
         // set inputs
         for (unsigned int i = 0; i < train_data->input_count; i++) {
@@ -126,19 +127,20 @@ void backpropagate(NN *network, TD *train_data, float learning_factor, unsigned 
         // backpropagate output
         for (unsigned int i = 0; i < network->neuron_count[layer]; i++) {
             neuron = &network->layers[layer][i];
-            float error = train_data->output[test][i] - neuron->output;
-            float delta = error * neuron_dsigmoid(neuron);
+            error = train_data->output[test][i] - neuron->output;
+            delta = error * neuron_dsigmoid(neuron);
             for (unsigned int j = 0; j < neuron->count.inputs; j++) {
-                float change = neuron->inputs[j]->input->output * delta;
-                neuron->inputs[j]->weight += (change * learning_factor);
+                change = neuron->inputs[j]->input->output * delta;
+                neuron->inputs[j]->weight += (change * learning_factor) + (neuron->last_change * momentum);
+                
             }
         }
     }
 }
 
 
-float train(NN *network, TD *train_data, float learning_factor) {
+float train(NN *network, TD *train_data, float learning_factor, float momentum) {
     float error = error_factor(network, train_data);
-    backpropagate(network, train_data, learning_factor, network->layer_count - 1);
+    backpropagate(network, train_data, learning_factor, momentum, network->layer_count - 1);
     return error_factor(network, train_data) - error;
 }

@@ -42,6 +42,6 @@ void set_input(NN *, unsigned int, float);
 float read_output(NN *, unsigned int);
 void calculate(NN *);
 float error_factor(NN *, TD *);
-float train(NN *, TD *, float);
+float train(NN *, TD *, float, float);
 
 #endif

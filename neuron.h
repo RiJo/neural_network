@@ -8,7 +8,7 @@
 
 #include "synapse.h"
 
-#define BIAS_INPUT 0.0
+#define BIAS_INPUT 1.0
 
 /*
 Artificial Neuron
@@ -19,6 +19,7 @@ struct Neuron {
     float bias;
     float input;
     float output;
+    float last_change;
 
     Synapse **inputs;
     Synapse **outputs;

@@ -58,9 +58,10 @@ int main() {
     printf("real   2:   %.2f \t%.2f\n\n", read_output(network, 0), read_output(network, 1));
 
     float learning_factor = 0.5;
+    float momentum = 0.1;
     float error;
     for (int i = 0; i < 1000; i++) {
-        error = train(network, train_data, learning_factor);
+        error = train(network, train_data, learning_factor, momentum);
         if (i % 100 == 0) {
             printf("   err: %.5f - %.5f\t\t output 2: %.2f   %.2f\n",
                     error, error_factor(network, train_data), read_output(network, 0), read_output(network, 1));
