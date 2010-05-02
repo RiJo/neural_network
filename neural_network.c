@@ -81,7 +81,7 @@ float read_output(NN *network, unsigned int index) {
 }
 
 /* Recalculate the neural network and set the out put neurons dependent on the
-   states of the input neurons */
+    states of the input neurons */
 void calculate(NN *network) {
     assert(network);
 
@@ -116,6 +116,9 @@ float error_factor(NN *network, TD *train_data) {
 
 /* Backpropagates the network and returns the error factor delta */
 void backpropagate(NN *network, TD *train_data, float learning_factor, float momentum, unsigned int layer) {
+    assert(network);
+    assert(train_data);
+
     Neuron *neuron;
     float error, delta, change;
     for (unsigned int test = 0; test < train_data->data_count; test++) {
@@ -132,7 +135,6 @@ void backpropagate(NN *network, TD *train_data, float learning_factor, float mom
             for (unsigned int j = 0; j < neuron->count.inputs; j++) {
                 change = neuron->inputs[j]->input->output * delta;
                 neuron->inputs[j]->weight += (change * learning_factor) + (neuron->last_change * momentum);
-                
             }
         }
     }
@@ -140,6 +142,9 @@ void backpropagate(NN *network, TD *train_data, float learning_factor, float mom
 
 
 float train(NN *network, TD *train_data, float learning_factor, float momentum) {
+    assert(network);
+    assert(train_data);
+
     float error = error_factor(network, train_data);
     backpropagate(network, train_data, learning_factor, momentum, network->layer_count - 1);
     return error_factor(network, train_data) - error;

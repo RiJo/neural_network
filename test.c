@@ -13,15 +13,9 @@ TD *generate_train_data() {
 
     input[0] = 0.75;
     input[1] = 0.25;
-    output[0] = 0.25;
+    output[0] = -0.25;
     output[1] = 0.75;
     add_train_data(data, input, output);
-
-    //~ input[0] = 0.75;
-    //~ input[1] = 0.25;
-    //~ output[0] = 0.25;
-    //~ output[1] = 0.75;
-    //~ add_train_data(data, input, output);
 
     input[0] = 0.25;
     input[1] = 0.75;
@@ -60,9 +54,9 @@ int main() {
     float learning_factor = 0.5;
     float momentum = 0.1;
     float error;
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 10000; i++) {
         error = train(network, train_data, learning_factor, momentum);
-        if (i % 100 == 0) {
+        if (i % 1000 == 0) {
             printf("   err: %.5f - %.5f\t\t output 2: %.2f   %.2f\n",
                     error, error_factor(network, train_data), read_output(network, 0), read_output(network, 1));
         }
