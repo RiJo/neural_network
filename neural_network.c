@@ -126,9 +126,11 @@ void backpropagate(NN *network, TD *train_data, float learning_factor, unsigned 
         // backpropagate output
         for (unsigned int i = 0; i < network->neuron_count[layer]; i++) {
             neuron = &network->layers[layer][i];
-            float diff = train_data->output[test][i] - neuron->output;
+            float error = train_data->output[test][i] - neuron->output;
+            float delta = error * neuron_dsigmoid(neuron);
             for (unsigned int j = 0; j < neuron->count.inputs; j++) {
-                neuron->inputs[i]->weight += (diff * learning_factor);
+                float change = neuron->inputs[j]->input->output * delta;
+                neuron->inputs[j]->weight += (change * learning_factor);
             }
         }
     }

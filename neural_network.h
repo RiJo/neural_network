@@ -20,6 +20,8 @@
         - a neuron fires at a given threshold
         
         - make number of layers dynamic
+        
+        - rename output/input of neuron (cunfusion with the same values of synapse)
 */
 
 

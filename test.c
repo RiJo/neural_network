@@ -2,14 +2,6 @@
 
 #include <stdio.h>
 
-void answer1() {
-    printf("Answer 1\n");
-}
-
-void answer2() {
-    printf("Answer 2\n");
-}
-
 TD *generate_train_data() {
     unsigned int inputs = 2;
     unsigned int outputs = 2;
@@ -65,12 +57,12 @@ int main() {
     printf("output 2:   %.2f \t%.2f\n", train_data->output[1][0], train_data->output[1][1]);
     printf("real   2:   %.2f \t%.2f\n\n", read_output(network, 0), read_output(network, 1));
 
-    float learning_factor = 0.01;
+    float learning_factor = 0.5;
     float error;
     for (int i = 0; i < 1000; i++) {
         error = train(network, train_data, learning_factor);
         if (i % 100 == 0) {
-            printf("   err: %.2f - %.2f\t\t output 2: %.2f   %.2f\n",
+            printf("   err: %.5f - %.5f\t\t output 2: %.2f   %.2f\n",
                     error, error_factor(network, train_data), read_output(network, 0), read_output(network, 1));
         }
     }
@@ -79,7 +71,7 @@ int main() {
     set_input(network, 0, train_data->input[0][0]);
     set_input(network, 1, train_data->input[0][1]);
     calculate(network);
-    printf("input  1:   %.2f \t%.2f\n", train_data->input[0][0], train_data->input[0][1]);
+    printf("\ninput  1:   %.2f \t%.2f\n", train_data->input[0][0], train_data->input[0][1]);
     printf("output 1:   %.2f \t%.2f\n", train_data->output[0][0], train_data->output[0][1]);
     printf("real   1:   %.2f \t%.2f\n\n", read_output(network, 0), read_output(network, 1));
 

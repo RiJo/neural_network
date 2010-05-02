@@ -38,3 +38,8 @@ void neuron_fire(Neuron *neuron) {
 float neuron_sigmoid(Neuron *neuron) {
     return tanh(neuron->input);
 }
+
+/* derivative of the sigmoid function */
+float neuron_dsigmoid(Neuron *neuron) {
+    return 1.0 - pow(neuron->output, 2);
+}
