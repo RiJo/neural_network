@@ -33,7 +33,7 @@ TD *generate_train_data() {
 }
 
 int main() {
-    unsigned int neurons[] = {2, 3, 2};
+    unsigned int neurons[] = {2, 5, 2};
     NN *network = create_neural_network(3, neurons);
     generate_synapses(network);
     TD *train_data = generate_train_data();
