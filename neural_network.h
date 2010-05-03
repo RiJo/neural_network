@@ -22,11 +22,14 @@
         - make number of layers dynamic
         
         - rename output/input of neuron (cunfusion with the same values of synapse)
+        
+        - fix variable names!! especially in for loops!!
 */
 
 
 typedef struct {
     Neuron **layers;
+    Synapse **synapses;
     unsigned int layer_count;
     unsigned int *neuron_count;
     unsigned int synapse_count;

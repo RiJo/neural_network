@@ -14,7 +14,7 @@ OBJS        = $(NAME).o                 \
 
 all: $(NAME)
 
-debug: CCFLAGS += $(CCDEBUG) $(CCPROFILE)
+debug: CCFLAGS += $(CCDEBUG)
 debug: $(NAME)
 
 $(NAME): $(OBJS) Makefile

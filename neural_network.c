@@ -12,6 +12,7 @@ NN *create_neural_network(unsigned int layers, unsigned int *neurons) {
     }
 
     network->layer_count = layers;
+    network->synapses = NULL;
     network->synapse_count = 0;
     network->neuron_count = (unsigned int *)malloc(sizeof(unsigned int) * layers);
     memcpy(network->neuron_count, neurons, sizeof(unsigned int) * layers);
@@ -21,10 +22,19 @@ NN *create_neural_network(unsigned int layers, unsigned int *neurons) {
 
 /* Free all memory allocated for the neural network */
 void destroy_neural_network(NN *network) {
+    // free synapses!!!
     for (unsigned int i = 0; i < network->layer_count; i++) {
+        for (unsigned int j = 0; j < network->neuron_count[i]; j++) {
+            neuron_destroy(&network->layers[i][j]);
+        }
         free(network->layers[i]);
     }
     free(network->layers);
+    free(network->neuron_count);
+    for (unsigned int i = 0; i < network->synapse_count; i++) {
+        free(network->synapses[i]);
+    }
+    free(network->synapses);
     free(network);
 }
 
@@ -40,17 +50,20 @@ void add_synapse(NN *network, Neuron *input, Neuron *output) {
     synapse->output = output;
     synapse->weight = (float)rand() / (float)RAND_MAX;
 
+    // store synapse reference
+    network->synapse_count++;
+    network->synapses = (Synapse **)realloc(network->synapses, sizeof(Synapse *) * network->synapse_count);
+    network->synapses[network->synapse_count - 1] = synapse;
+
     // bind input neuron
-    input->count.outputs++;
-    input->outputs = realloc(input->outputs, sizeof(Synapse *) * input->count.outputs);
-    input->outputs[input->count.outputs - 1] = synapse;
+    input->output_count++;
+    input->outputs = realloc(input->outputs, sizeof(Synapse *) * input->output_count);
+    input->outputs[input->output_count - 1] = synapse;
 
     // bind output neuron
-    output->count.inputs++;
-    output->inputs = realloc(output->inputs, sizeof(Synapse *) * output->count.inputs);
-    output->inputs[output->count.inputs - 1] = synapse;
-
-    network->synapse_count++;
+    output->input_count++;
+    output->inputs = realloc(output->inputs, sizeof(Synapse *) * output->input_count);
+    output->inputs[output->input_count - 1] = synapse;
 }
 
 /* Generate a synapse between all neurons at the border between the layers */
@@ -130,7 +143,7 @@ void backpropagate_hidden(NN *network, float *previous_deltas, float learning_fa
             error += previous_deltas[previous] * neuron->output;
         }
         deltas[current] = error * neuron_dsigmoid(neuron);
-        for (unsigned int j = 0; j < neuron->count.inputs; j++) {
+        for (unsigned int j = 0; j < neuron->input_count; j++) {
             change = neuron->inputs[j]->input->output * deltas[current];
             neuron->inputs[j]->weight += (change * learning_factor) + (neuron->last_change * momentum);
             neuron->last_change = change;
@@ -139,7 +152,7 @@ void backpropagate_hidden(NN *network, float *previous_deltas, float learning_fa
 
     // recurse
     backpropagate_hidden(network, deltas, learning_factor, momentum, layer - 1);
-    free(previous_deltas);
+    free(deltas);
 }
 
 /* Backpropagates the network outputs */
@@ -164,7 +177,7 @@ void backpropagate_output(NN *network, TD *train_data, float learning_factor, fl
             neuron = &network->layers[layer][i];
             error = train_data->output[test][i] - neuron->output;
             deltas[i] = error * neuron_dsigmoid(neuron);
-            for (unsigned int j = 0; j < neuron->count.inputs; j++) {
+            for (unsigned int j = 0; j < neuron->input_count; j++) {
                 change = neuron->inputs[j]->input->output * deltas[i];
                 neuron->inputs[j]->weight += (change * learning_factor) + (neuron->last_change * momentum);
                 neuron->last_change = change;
@@ -172,6 +185,7 @@ void backpropagate_output(NN *network, TD *train_data, float learning_factor, fl
         }
         // recurse
         backpropagate_hidden(network, deltas, learning_factor, momentum, layer - 1);
+        free(deltas);
     }
 }
 

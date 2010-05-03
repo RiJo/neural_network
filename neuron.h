@@ -24,13 +24,12 @@ struct Neuron {
     Synapse **inputs;
     Synapse **outputs;
 
-    struct {
-        unsigned int inputs;
-        unsigned int outputs;
-    } count;
+    unsigned int input_count;
+    unsigned int output_count;
 };
 
 void neuron_init(Neuron *);
+void neuron_destroy(Neuron *);
 void neuron_fire(Neuron *);
 float neuron_value(Neuron *);
 float neuron_sigmoid(Neuron *);

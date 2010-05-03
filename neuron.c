@@ -7,13 +7,19 @@ void neuron_init(Neuron *neuron) {
     neuron->bias = BIAS_INPUT;
     neuron->inputs = NULL;
     neuron->outputs = NULL;
-    neuron->count.inputs = 0;
-    neuron->count.outputs = 0;
+    neuron->input_count = 0;
+    neuron->output_count = 0;
+}
+
+void neuron_destroy(Neuron *neuron) {
+    free(neuron->inputs);
+    free(neuron->outputs);
+    //free(neuron);
 }
 
 /* calculates the (input) value of the neuron */
 float neuron_value(Neuron *neuron) {
-    if (neuron->count.inputs == 0) {
+    if (neuron->input_count == 0) {
         // neuron in layer 0 (no inputs)
         return neuron->input;
     }
@@ -21,7 +27,7 @@ float neuron_value(Neuron *neuron) {
     Synapse *synapse;
     Neuron *input;
     float value = neuron->bias;
-    for (unsigned int i = 0; i < neuron->count.inputs; i++) {
+    for (unsigned int i = 0; i < neuron->input_count; i++) {
         synapse = neuron->inputs[i];
         input = synapse->input;
         value += (input->output * synapse->weight);
