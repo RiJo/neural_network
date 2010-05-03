@@ -114,38 +114,73 @@ float error_factor(NN *network, TD *train_data) {
     return error / (train_data->output_count * train_data->data_count);
 }
 
-/* Backpropagates the network and returns the error factor delta */
-void backpropagate(NN *network, TD *train_data, float learning_factor, float momentum, unsigned int layer) {
+/* Backpropagates the network hidden layers recursively */
+void backpropagate_hidden(NN *network, float *previous_deltas, float learning_factor, float momentum, unsigned int layer) {
+    if (layer == 0) {
+        return;
+    }
+
+    Neuron *neuron;
+    float error, change;
+    float *deltas = (float *)malloc(sizeof(float) * network->neuron_count[layer]);
+    for (unsigned int current = 0; current < network->neuron_count[layer]; current++) {
+        neuron = &network->layers[layer][current];
+        error = 0.0;
+        for (unsigned int previous = 0; previous < network->neuron_count[layer + 1]; previous++) {
+            error += previous_deltas[previous] * neuron->output;
+        }
+        deltas[current] = error * neuron_dsigmoid(neuron);
+        for (unsigned int j = 0; j < neuron->count.inputs; j++) {
+            change = neuron->inputs[j]->input->output * deltas[current];
+            neuron->inputs[j]->weight += (change * learning_factor) + (neuron->last_change * momentum);
+            neuron->last_change = change;
+        }
+    }
+
+    // recurse
+    backpropagate_hidden(network, deltas, learning_factor, momentum, layer - 1);
+    free(previous_deltas);
+}
+
+/* Backpropagates the network outputs */
+void backpropagate_output(NN *network, TD *train_data, float learning_factor, float momentum) {
     assert(network);
     assert(train_data);
 
+    unsigned int layer = network->layer_count - 1;
+
     Neuron *neuron;
-    float error, delta, change;
+    float error, change;
+    float *deltas;
     for (unsigned int test = 0; test < train_data->data_count; test++) {
         // set inputs
         for (unsigned int i = 0; i < train_data->input_count; i++) {
             network->layers[0][i].input = train_data->input[test][i];
         }
         calculate(network);
-        // backpropagate output
+        // backpropagate
+        deltas = (float *)malloc(sizeof(float) * network->neuron_count[layer]);
         for (unsigned int i = 0; i < network->neuron_count[layer]; i++) {
             neuron = &network->layers[layer][i];
             error = train_data->output[test][i] - neuron->output;
-            delta = error * neuron_dsigmoid(neuron);
+            deltas[i] = error * neuron_dsigmoid(neuron);
             for (unsigned int j = 0; j < neuron->count.inputs; j++) {
-                change = neuron->inputs[j]->input->output * delta;
+                change = neuron->inputs[j]->input->output * deltas[i];
                 neuron->inputs[j]->weight += (change * learning_factor) + (neuron->last_change * momentum);
+                neuron->last_change = change;
             }
         }
+        // recurse
+        backpropagate_hidden(network, deltas, learning_factor, momentum, layer - 1);
     }
 }
 
-
+/* train the neural network with the defined data */
 float train(NN *network, TD *train_data, float learning_factor, float momentum) {
     assert(network);
     assert(train_data);
 
     float error = error_factor(network, train_data);
-    backpropagate(network, train_data, learning_factor, momentum, network->layer_count - 1);
+    backpropagate_output(network, train_data, learning_factor, momentum);
     return error_factor(network, train_data) - error;
 }
