@@ -9,6 +9,7 @@ NN *create_neural_network(unsigned int layers, unsigned int *neurons) {
     network->layers = (Neuron **)malloc(sizeof(Neuron *) * layers);
     for (unsigned int i = 0; i < layers; i++) {
         network->layers[i] = (Neuron *)malloc(sizeof(Neuron) * neurons[i]);
+        neuron_init(network->layers[i]);
     }
 
     network->layer_count = layers;
@@ -22,7 +23,6 @@ NN *create_neural_network(unsigned int layers, unsigned int *neurons) {
 
 /* Free all memory allocated for the neural network */
 void destroy_neural_network(NN *network) {
-    // free synapses!!!
     for (unsigned int i = 0; i < network->layer_count; i++) {
         for (unsigned int j = 0; j < network->neuron_count[i]; j++) {
             neuron_destroy(&network->layers[i][j]);
@@ -57,12 +57,12 @@ void add_synapse(NN *network, Neuron *input, Neuron *output) {
 
     // bind input neuron
     input->output_count++;
-    input->outputs = realloc(input->outputs, sizeof(Synapse *) * input->output_count);
+    input->outputs = (Synapse **)realloc(input->outputs, sizeof(Synapse *) * input->output_count);
     input->outputs[input->output_count - 1] = synapse;
 
     // bind output neuron
     output->input_count++;
-    output->inputs = realloc(output->inputs, sizeof(Synapse *) * output->input_count);
+    output->inputs = (Synapse **)realloc(output->inputs, sizeof(Synapse *) * output->input_count);
     output->inputs[output->input_count - 1] = synapse;
 }
 

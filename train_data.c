@@ -29,14 +29,9 @@ void add_train_data(TD *data, float *input, float *output) {
     data->input = (float **)realloc(data->input, sizeof(float *) * data->data_count);
     data->input[data->data_count - 1] = (float *)malloc(sizeof(float) * data->input_count);
     memcpy(data->input[data->data_count - 1], input, sizeof(float) * data->input_count);
-    //~ data->input[data->data_count - 1][0] = 0.5;
-    //~ data->input[data->data_count - 1][1] = 0.25;
-    
 
     // set output data
     data->output = (float **)realloc(data->output, sizeof(float *) * data->data_count);
     data->output[data->data_count - 1] = (float *)malloc(sizeof(float) * data->output_count);
     memcpy(data->output[data->data_count - 1], output, sizeof(float) * data->output_count);
-    //~ data->output[data->data_count - 1][0] = 0.5;
-    //~ data->output[data->data_count - 1][1] = 0.25;
 }
