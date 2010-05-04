@@ -35,7 +35,7 @@ NN *nn_load_from_file(FILE *file) {
     // parse header
     char structure[255];
     memset(structure, '\0', 255);
-    if (fscanf (file, "[NN-" NN_FILE_DUMP_VERSION "<%[0123456789:]>]]", structure) != 1) {
+    if (fscanf (file, "[NN-" NN_FILE_DUMP_VERSION "<%[0123456789:]>]\r\n", structure) != 1) {
         printf("Error: invalid version of neural network dump file. Expected version: %s\n", NN_FILE_DUMP_VERSION);
         return NULL;
     }
@@ -66,6 +66,11 @@ NN *nn_load_from_file(FILE *file) {
     
     // create network
     NN *network = nn_create(layer_count, neuron_count);
+    unsigned int layer1, layer2, n1, n2;
+    float weight, change;
+    while(fscanf(file, "%d:%d:%d:%d:%f:%f", &layer1, &n1, &layer2, &n2, &weight, &change) == 6) {
+        printf("Synapse: %d:%d - %d:%d - weight:%.2f - change:%.2f\n", layer1, n1, layer2, n2, weight, change);
+    }
     
     // parse data
 

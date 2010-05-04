@@ -9,11 +9,9 @@
  *
  * Structure of dump file:
  *    [NN-1.0<2:5:2>]
- *    layer:n1:n2:weight:change
- *    layer:n1:n2:weight:change
- *    layer:n1:n2:weight:change
- *    layer:n1:n2:weight:change
- *    layer:n1:n2:weight:change
+ *    layer1:n1:layer2:n2:weight:change
+ *    layer1:n1:layer2:n2:weight:change
+ *    layer1:n1:layer2:n2:weight:change
  */
  
  /*
