@@ -27,6 +27,29 @@ NN *nn_create(unsigned int layers, unsigned int *neurons) {
     return network;
 }
 
+/* Initalize a neural network based upon the data in a prestored file */
+NN *nn_load_from_file(FILE *file) {
+    assert(file);
+
+    // parse header
+    
+    // create network
+    
+    // parse data
+
+    return NULL;
+}
+
+/* Dump the neural networks data into a file for later use */
+void nn_dump_to_file(NN *network, FILE *file) {
+    assert(network);
+    assert(file);
+
+    // write header
+    
+    // write data
+}
+
 /* Free all memory allocated for the neural network */
 void nn_destroy(NN *network) {
     for (unsigned int layer = 0; layer < network->layer_count; layer++) {
