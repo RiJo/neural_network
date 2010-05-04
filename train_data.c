@@ -11,11 +11,12 @@ TD *train_data_create(unsigned int inputs, unsigned int outputs) {
 }
 
 void train_data_destroy(TD *data) {
-    for (unsigned int i = 0; i < data->input_count; i++) {
+    unsigned int i;
+    for (i = 0; i < data->input_count; i++) {
         free(data->input[i]);
     }
     free(data->input);
-    for (unsigned int i = 0; i < data->output_count; i++) {
+    for (i = 0; i < data->output_count; i++) {
         free(data->output[i]);
     }
     free(data->output);

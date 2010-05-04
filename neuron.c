@@ -14,23 +14,24 @@ void neuron_init(Neuron *neuron) {
 void neuron_destroy(Neuron *neuron) {
     free(neuron->inputs);
     free(neuron->outputs);
+
+    /* this is done from outside, all neurons are allocated by realloc and is
+       therefore allocated in one block! */
     //free(neuron);
 }
 
 /* calculates the (input) value of the neuron */
 float neuron_value(Neuron *neuron) {
     if (neuron->input_count == 0) {
-        // neuron in layer 0 (no inputs)
+        // neuron in layer 0 (input layer)
         return neuron->input;
     }
 
     Synapse *synapse;
-    Neuron *input;
     float value = neuron->bias;
-    for (unsigned int i = 0; i < neuron->input_count; i++) {
-        synapse = neuron->inputs[i];
-        input = synapse->input;
-        value += (input->output * synapse->weight);
+    for (unsigned int input = 0; input < neuron->input_count; input++) {
+        synapse = neuron->inputs[input];
+        value += (synapse->input->output * synapse->weight);
     }
     return value;
 }
