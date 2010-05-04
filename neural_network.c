@@ -9,7 +9,9 @@ NN *create_neural_network(unsigned int layers, unsigned int *neurons) {
     network->layers = (Neuron **)malloc(sizeof(Neuron *) * layers);
     for (unsigned int i = 0; i < layers; i++) {
         network->layers[i] = (Neuron *)malloc(sizeof(Neuron) * neurons[i]);
-        neuron_init(network->layers[i]);
+        for (unsigned int j = 0; j < neurons[i]; j++) {
+            neuron_init(&network->layers[i][j]);
+        }
     }
 
     network->layer_count = layers;
