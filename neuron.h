@@ -27,7 +27,6 @@ struct Neuron {
     float bias;
     float input;
     float output;
-    float last_change;
 
     Synapse **inputs;
     Synapse **outputs;
