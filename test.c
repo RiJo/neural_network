@@ -2,7 +2,10 @@
 
 #include <stdio.h>
 
-TD *generate_train_data() {
+// forward declaration
+TD *generate_train_data(void);
+
+TD *generate_train_data(void) {
     unsigned int inputs = 2;
     unsigned int outputs = 2;
 

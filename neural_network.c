@@ -1,5 +1,9 @@
 #include "neural_network.h"
 
+// forward declaration of private functions
+void backpropagate_output(NN *, TD *, float , float);
+void backpropagate_hidden(NN *, float *, float , float , unsigned int);
+
 /* Initialize the neural network with all neurons */
 NN *nn_create(unsigned int layers, unsigned int *neurons) {
     srand (time(NULL));
