@@ -6,23 +6,13 @@
 #include <string.h>
 #include <assert.h>
 #include <time.h>
-//#include <math.h>
 #include <stdio.h>
 #include "neuron.h"
 #include "train_data.h"
 
 /*
     Notes:
-        - reinforcement training (learning paradigm)
-        - backpropagation (learning algorithm)
-
-        - how to pass the vertices to NN? (x*width+y)? start origin and pass angle+length?
-        - a neuron fires at a given threshold
-        
-        - make number of layers dynamic
-        
         - rename output/input of neuron (cunfusion with the same values of synapse)
-        
         - fix variable names!! especially in for loops!!
 */
 

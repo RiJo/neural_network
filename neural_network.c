@@ -50,7 +50,7 @@ void add_synapse(NN *network, Neuron *input, Neuron *output) {
     Synapse *synapse = (Synapse *)malloc(sizeof(Synapse));
     synapse->input = input;
     synapse->output = output;
-    synapse->weight = (float)rand() / (float)RAND_MAX;
+    synapse->weight = ((float)rand() / ((float)RAND_MAX / 2.0)) - 1; // (-1.0)-1.0
 
     // store synapse reference
     network->synapse_count++;
