@@ -1,3 +1,11 @@
+/*
+ * A neuron is the most important block in the neural network. It handles inputs
+ * and with a fire function the output of a neuron is calculated. The neurons
+ * in the neural network are connected to each other by synapses. If the
+ * synapses represents edges in a graph data structure, then the neurons
+ * represents the nodes.
+ */
+
 #ifndef _NEURON_H_
 #define _NEURON_H_
 
