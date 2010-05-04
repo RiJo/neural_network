@@ -13,7 +13,6 @@
 /*
     Notes:
         - rename output/input of neuron (cunfusion with the same values of synapse)
-        - fix variable names!! especially in for loops!!
         - fix error_factor() and train() return values
         - printout invalid mallocs()
 */
