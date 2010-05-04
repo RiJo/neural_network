@@ -2,6 +2,7 @@
 #define _SYNAPSE_H_
 
 #include <stdint.h>
+#include <stdlib.h>
 #include <math.h>
 
 typedef struct Neuron Neuron; // forward declaration
@@ -11,5 +12,7 @@ typedef struct {
     Neuron *output;
     float weight; /* 0 if no connection */
 } Synapse;
+
+Synapse *synapse_create(Neuron *, Neuron *);
 
 #endif

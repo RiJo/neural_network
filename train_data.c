@@ -1,6 +1,6 @@
 #include "train_data.h"
 
-TD *create_train_data(unsigned int inputs, unsigned int outputs) {
+TD *train_data_create(unsigned int inputs, unsigned int outputs) {
     TD *data = (TD *)malloc(sizeof(TD));
     data->input = NULL;
     data->output = NULL;
@@ -10,7 +10,7 @@ TD *create_train_data(unsigned int inputs, unsigned int outputs) {
     return data;
 }
 
-void destroy_train_data(TD *data) {
+void train_data_destroy(TD *data) {
     for (unsigned int i = 0; i < data->input_count; i++) {
         free(data->input[i]);
     }
@@ -22,7 +22,7 @@ void destroy_train_data(TD *data) {
     free(data);
 }
 
-void add_train_data(TD *data, float *input, float *output) {
+void train_data_add(TD *data, float *input, float *output) {
     data->data_count++;
 
     // set input data

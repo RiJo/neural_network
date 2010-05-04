@@ -12,9 +12,8 @@ typedef struct {
     unsigned int output_count;
 } TD;
 
-TD *create_train_data(unsigned int, unsigned int);
-void destroy_train_data(TD *);
-
-void add_train_data(TD *, float *, float *);
+TD *train_data_create(unsigned int, unsigned int);
+void train_data_destroy(TD *);
+void train_data_add(TD *, float *, float *);
 
 #endif

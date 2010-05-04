@@ -14,8 +14,8 @@
     Notes:
         - rename output/input of neuron (cunfusion with the same values of synapse)
         - fix variable names!! especially in for loops!!
+        - fix error_factor() and train() return values
 */
-
 
 typedef struct {
     Neuron **layers;
@@ -25,16 +25,14 @@ typedef struct {
     unsigned int synapse_count;
 } NN;
 
-NN *create_neural_network(unsigned int, unsigned int *);
-void destroy_neural_network(NN *);
-
-void add_synapse(NN *, Neuron *, Neuron *);
-void generate_synapses(NN *);
-
-void set_input(NN *, unsigned int, float);
-float read_output(NN *, unsigned int);
-void calculate(NN *);
-float error_factor(NN *, TD *);
-float train(NN *, TD *, float, float);
+NN *nn_create(unsigned int, unsigned int *);
+void nn_destroy(NN *);
+void nn_add_synapse(NN *, Neuron *, Neuron *);
+void nn_generate_synapses(NN *);
+void nn_set_input(NN *, unsigned int, float);
+float nn_read_output(NN *, unsigned int);
+void nn_calculate(NN *);
+float nn_error_factor(NN *, TD *);
+float nn_train(NN *, TD *, float, float);
 
 #endif
