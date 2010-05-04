@@ -6,6 +6,14 @@
  * This network uses backpropagation for training. This means that training
  * data (list of inputs with corresponding outputs) can be passed to the neural
  * network which is re-calibrated accordingly.
+ *
+ * Structure of dump file:
+ *    [NN-1.0<2:5:2>]
+ *    layer:n1:n2:weight:change
+ *    layer:n1:n2:weight:change
+ *    layer:n1:n2:weight:change
+ *    layer:n1:n2:weight:change
+ *    layer:n1:n2:weight:change
  */
  
  /*
@@ -24,6 +32,8 @@
 #include <stdio.h>
 #include "neuron.h"
 #include "train_data.h"
+
+#define NN_FILE_DUMP_VERSION "1.0"
 
 typedef struct {
     Neuron **layers;

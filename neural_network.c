@@ -27,20 +27,53 @@ NN *nn_create(unsigned int layers, unsigned int *neurons) {
     return network;
 }
 
-/* Initalize a neural network based upon the data in a prestored file */
+/* Initalize a neural network based upon the data in a prestored file (see the
+   header file of this module for more info) */
 NN *nn_load_from_file(FILE *file) {
     assert(file);
 
     // parse header
+    char structure[255];
+    memset(structure, '\0', 255);
+    if (fscanf (file, "[NN-" NN_FILE_DUMP_VERSION "<%[0123456789:]>]]", structure) != 1) {
+        printf("Error: invalid version of neural network dump file. Expected version: %s\n", NN_FILE_DUMP_VERSION);
+        return NULL;
+    }
+    unsigned int layer_count = 0;
+    for (unsigned int i = 0; i < strlen(structure); i++) {
+        if (structure[i] == ':') layer_count++;
+    }
+    if (layer_count == 0) {
+        printf("Error: Could not find any layers in neural network dump file\n");
+        return NULL;
+    }
+    layer_count++;
+    unsigned int neuron_count[layer_count];
+    char *offset = structure;
+    for (unsigned int i = 0; i < layer_count; i++) {
+        neuron_count[i] = atoi(offset);
+        offset = strchr(offset, ':') + 1;
+    }
+
+    // temp temp tmep
+    printf("Version: %s\n", NN_FILE_DUMP_VERSION);
+    printf("Structure: %s\n", structure);
+    printf("Layers: %d\n", layer_count);
+    for (unsigned int i = 0; i < layer_count; i++) {
+        printf("Layer %d: number of neurons: %d\n", i, neuron_count[i]);
+    }
+    // temp temp tmep
     
     // create network
+    NN *network = nn_create(layer_count, neuron_count);
     
     // parse data
 
-    return NULL;
+    return network;
 }
 
-/* Dump the neural networks data into a file for later use */
+/* Dump the neural networks data into a file for later use (see the header file
+   of this module for more info) */
 void nn_dump_to_file(NN *network, FILE *file) {
     assert(network);
     assert(file);
