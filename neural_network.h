@@ -14,7 +14,6 @@
     Notes:
         - rename output/input of neuron (cunfusion with the same values of synapse)
         - fix error_factor() and train() return values
-        - printout invalid mallocs()
 */
 
 typedef struct {

@@ -111,18 +111,21 @@ float nn_error_factor(NN *network, TD *train_data) {
     assert(train_data);
 
     float error = 0.0;
+    float test_error;
     for (unsigned int test = 0; test < train_data->data_count; test++) {
         // set inputs
         for (unsigned int input = 0; input < train_data->input_count; input++) {
             network->layers[0][input].input = train_data->input[test][input];
         }
         nn_calculate(network);
-        // calculate error in output
+        // calculate error in outputs
+        test_error = 0.0;
         for (unsigned int output = 0; output < train_data->output_count; output++) {
-            error += fabs(train_data->output[test][output] - network->layers[network->layer_count - 1][output].output);
+            test_error += fabs(train_data->output[test][output] - network->layers[network->layer_count - 1][output].output);
         }
+        error += (test_error / (float)train_data->output_count);
     }
-    return error / (train_data->output_count * train_data->data_count);
+    return error / (float)train_data->data_count;
 }
 
 /* Backpropagates the network hidden layers recursively */

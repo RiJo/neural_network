@@ -53,12 +53,13 @@ int main() {
 
     float learning_factor = 0.5;
     float momentum = 0.1;
-    float error;
+    float error = 0.0;
     for (int i = 0; i < 100000; i++) {
-        error = nn_train(network, train_data, learning_factor, momentum);
+        error += nn_train(network, train_data, learning_factor, momentum);
         if (i % 10000 == 0) {
             printf("   err: %.5f - %.5f\t\t output 2: %.2f   %.2f\n",
                     error, nn_error_factor(network, train_data), nn_read_output(network, 0), nn_read_output(network, 1));
+            error = 0.0;
         }
     }
 
