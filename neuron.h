@@ -42,5 +42,4 @@ float neuron_value(Neuron *);
 float neuron_sigmoid(Neuron *);
 float neuron_dsigmoid(Neuron *);
 
-
 #endif

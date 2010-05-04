@@ -3,7 +3,6 @@
 void neuron_init(Neuron *neuron) {
     neuron->input = 0.0;
     neuron->output = 0.0;
-    neuron->last_change = 0.0;
     neuron->bias = BIAS_INPUT;
     neuron->inputs = NULL;
     neuron->outputs = NULL;

@@ -17,7 +17,7 @@ typedef struct {
     Neuron *input;
     Neuron *output;
     float weight; /* 0 if no connection */
-    float last_change;
+    float change; /* last change in weight */
 } Synapse;
 
 Synapse *synapse_create(Neuron *, Neuron *);

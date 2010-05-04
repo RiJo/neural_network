@@ -162,6 +162,7 @@ void backpropagate_hidden(NN *network, float *previous_deltas, float learning_fa
     }
 
     Neuron *current_neuron;
+    Synapse *synapse;
     float error, change;
     float *deltas = (float *)malloc(sizeof(float) * network->neuron_count[layer]);
     for (unsigned int current = 0; current < network->neuron_count[layer]; current++) {
@@ -173,8 +174,9 @@ void backpropagate_hidden(NN *network, float *previous_deltas, float learning_fa
         deltas[current] = error * neuron_dsigmoid(current_neuron);
         for (unsigned int input = 0; input < current_neuron->input_count; input++) {
             change = current_neuron->inputs[input]->input->output * deltas[current];
-            current_neuron->inputs[input]->weight += (change * learning_factor) + (current_neuron->last_change * momentum);
-            current_neuron->last_change = change;
+            synapse = current_neuron->inputs[input];
+            synapse->weight += (change * learning_factor) + (synapse->change * momentum);
+            synapse->change = change;
         }
     }
 
@@ -191,6 +193,7 @@ void backpropagate_output(NN *network, TD *train_data, float learning_factor, fl
     unsigned int layer = network->layer_count - 1;
 
     Neuron *current_neuron;
+    Synapse *synapse;
     float error, change;
     float *deltas;
     for (unsigned int test = 0; test < train_data->data_count; test++) {
@@ -207,8 +210,9 @@ void backpropagate_output(NN *network, TD *train_data, float learning_factor, fl
             deltas[neuron] = error * neuron_dsigmoid(current_neuron);
             for (unsigned int input = 0; input < current_neuron->input_count; input++) {
                 change = current_neuron->inputs[input]->input->output * deltas[neuron];
-                current_neuron->inputs[input]->weight += (change * learning_factor) + (current_neuron->last_change * momentum);
-                current_neuron->last_change = change;
+                synapse = current_neuron->inputs[input];
+                synapse->weight += (change * learning_factor) + (synapse->change * momentum);
+                synapse->change = change;
             }
         }
         // recurse
