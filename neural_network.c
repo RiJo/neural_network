@@ -28,14 +28,14 @@ NN *nn_create(unsigned int layers, unsigned int *neurons) {
 }
 
 /* Initalize a neural network based upon the data in a prestored file (see the
-   header file of this module for more info) */
+    header file of this module for more info) */
 NN *nn_load_from_file(FILE *file) {
     assert(file);
 
     // parse header
     char structure[255];
     memset(structure, '\0', 255);
-    if (fscanf (file, "[NN-" NN_FILE_DUMP_VERSION "<%[0123456789:]>]\r\n", structure) != 1) {
+    if (fscanf (file, "[NN-" NN_FILE_DUMP_VERSION "<%[0123456789:]>]", structure) != 1) {
         printf("Error: invalid version of neural network dump file. Expected version: %s\n", NN_FILE_DUMP_VERSION);
         return NULL;
     }
@@ -63,28 +63,31 @@ NN *nn_load_from_file(FILE *file) {
         printf("Layer %d: number of neurons: %d\n", i, neuron_count[i]);
     }
     // temp temp tmep
-    
+
     // create network
     NN *network = nn_create(layer_count, neuron_count);
     unsigned int layer1, layer2, n1, n2;
     float weight, change;
+    Synapse *synapse;
     while(fscanf(file, "%d:%d:%d:%d:%f:%f", &layer1, &n1, &layer2, &n2, &weight, &change) == 6) {
+        nn_add_synapse(network, layer1, n1, layer2, n2);
+        synapse = network->synapses[network->synapse_count - 1];
+        synapse->weight = weight;
+        synapse->change = change;
         printf("Synapse: %d:%d - %d:%d - weight:%.2f - change:%.2f\n", layer1, n1, layer2, n2, weight, change);
     }
-    
-    // parse data
 
     return network;
 }
 
 /* Dump the neural networks data into a file for later use (see the header file
-   of this module for more info) */
+    of this module for more info) */
 void nn_dump_to_file(NN *network, FILE *file) {
     assert(network);
     assert(file);
 
     // write header
-    
+
     // write data
 }
 
@@ -106,11 +109,16 @@ void nn_destroy(NN *network) {
 }
 
 /* Generates a synapse between the given neurons */
-void nn_add_synapse(NN *network, Neuron *input, Neuron *output) {
+void nn_add_synapse(NN *network, unsigned int input_layer, unsigned int input_neuron,
+        unsigned int output_layer, unsigned int output_neuron) {
     assert(network);
-    assert(input);
-    assert(output);
+    assert(input_layer < network->layer_count);
+    assert(output_layer < network->layer_count);
+    assert(input_neuron < network->neuron_count[input_layer]);
+    assert(output_neuron < network->neuron_count[output_layer]);
 
+    Neuron *input = &network->layers[input_layer][input_neuron];
+    Neuron *output = &network->layers[output_layer][output_neuron];
     Synapse *synapse = synapse_create(input, output);
 
     // store synapse reference
@@ -136,7 +144,7 @@ void nn_generate_synapses(NN *network) {
     for (unsigned int layer = 1; layer < network->layer_count; layer++) {
         for (unsigned int neuron1 = 0; neuron1 < network->neuron_count[layer - 1]; neuron1++) {
             for (unsigned int neuron2 = 0; neuron2 < network->neuron_count[layer]; neuron2++) {
-                nn_add_synapse(network, &network->layers[layer - 1][neuron1], &network->layers[layer][neuron2]);
+                nn_add_synapse(network, layer - 1, neuron1, layer, neuron2);
             }
         }
     }
