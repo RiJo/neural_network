@@ -35,7 +35,7 @@ NN *nn_load_from_file(FILE *file) {
     // parse header
     char structure[255];
     memset(structure, '\0', 255);
-    if (fscanf (file, "[NN-" NN_FILE_DUMP_VERSION "<%[0123456789:]>]", structure) != 1) {
+    if (fscanf (file, "[NN-" NN_FILE_DUMP_VERSION "<%[0123456789:]>]\r\n", structure) != 1) {
         printf("Error: invalid version of neural network dump file. Expected version: %s\n", NN_FILE_DUMP_VERSION);
         return NULL;
     }
@@ -57,11 +57,11 @@ NN *nn_load_from_file(FILE *file) {
 
     // create network
     NN *network = nn_create(layer_count, neuron_count);
-    unsigned int layer1, layer2, n1, n2;
+    unsigned int layer1, layer2, neuron1, neuron2;
     float weight, change;
     Synapse *synapse;
-    while(fscanf(file, "%d:%d:%d:%d:%f:%f", &layer1, &n1, &layer2, &n2, &weight, &change) == 6) {
-        nn_add_synapse(network, layer1, n1, layer2, n2);
+    while(fscanf(file, "%d:%d:%d:%d:%f:%f\r\n", &layer1, &neuron1, &layer2, &neuron2, &weight, &change) == 6) {
+        nn_add_synapse(network, layer1, neuron1, layer2, neuron2);
         synapse = network->synapses[network->synapse_count - 1];
         synapse->weight = weight;
         synapse->change = change;
@@ -77,8 +77,36 @@ void nn_dump_to_file(NN *network, FILE *file) {
     assert(file);
 
     // write header
+    char structure[255];
+    memset(structure, '\0', 255);
+    
+    if (network->layer_count > 0) {
+        sprintf(structure, "%d", network->neuron_count[0]);
+        for (unsigned int i = 1; i < network->layer_count; i++) {
+            sprintf(&structure[strlen(structure)], ":%d", network->neuron_count[i]);
+        }
+        fprintf(file, "[NN-%s<%s>]\r\n", NN_FILE_DUMP_VERSION, structure);
+    }
 
     // write data
+    Synapse *synapse;
+    unsigned int layer1, layer2, neuron1, neuron2;
+    for (unsigned int i = 0; i < network->synapse_count; i++) {
+        synapse = network->synapses[i];
+        for (unsigned int layer = 0; layer < network->layer_count; layer++) {
+            for (unsigned int neuron = 0; neuron < network->neuron_count[layer]; neuron++) {
+                if (&network->layers[layer][neuron] == synapse->input) {
+                    layer1 = layer;
+                    neuron1 = neuron;
+                }
+                if (&network->layers[layer][neuron] == synapse->output) {
+                    layer2 = layer;
+                    neuron2 = neuron;
+                }
+            }
+        }
+        fprintf(file, "%d:%d:%d:%d:%f:%f\r\n", layer1, neuron1, layer2, neuron2, synapse->weight, synapse->change);
+    }
 }
 
 /* Free all memory allocated for the neural network */
