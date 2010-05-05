@@ -54,7 +54,7 @@ int main() {
     printf("output 2:   %.2f \t%.2f\n", train_data->output[1][0], train_data->output[1][1]);
     printf("real   2:   %.2f \t%.2f\n\n", nn_read_output(network, 0), nn_read_output(network, 1));
 
-    float learning_factor = 0.5;
+    /*float learning_factor = 0.5;
     float momentum = 0.1;
     float error = 0.0;
     for (int i = 0; i < 100000; i++) {
@@ -64,7 +64,7 @@ int main() {
                     error, nn_error_factor(network, train_data), nn_read_output(network, 0), nn_read_output(network, 1));
             error = 0.0;
         }
-    }
+    }*/
 
     // show results of input 1
     nn_set_input(network, 0, train_data->input[0][0]);

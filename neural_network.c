@@ -55,15 +55,6 @@ NN *nn_load_from_file(FILE *file) {
         offset = strchr(offset, ':') + 1;
     }
 
-    // temp temp tmep
-    printf("Version: %s\n", NN_FILE_DUMP_VERSION);
-    printf("Structure: %s\n", structure);
-    printf("Layers: %d\n", layer_count);
-    for (unsigned int i = 0; i < layer_count; i++) {
-        printf("Layer %d: number of neurons: %d\n", i, neuron_count[i]);
-    }
-    // temp temp tmep
-
     // create network
     NN *network = nn_create(layer_count, neuron_count);
     unsigned int layer1, layer2, n1, n2;
@@ -74,7 +65,6 @@ NN *nn_load_from_file(FILE *file) {
         synapse = network->synapses[network->synapse_count - 1];
         synapse->weight = weight;
         synapse->change = change;
-        printf("Synapse: %d:%d - %d:%d - weight:%.2f - change:%.2f\n", layer1, n1, layer2, n2, weight, change);
     }
 
     return network;
