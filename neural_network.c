@@ -57,6 +57,9 @@ NN *nn_load_from_file(FILE *file) {
 
     // create network
     NN *network = nn_create(layer_count, neuron_count);
+    network->layer_count = layer_count;
+    network->neuron_count = (unsigned int *)malloc(sizeof(unsigned int) * layer_count);
+    memcpy(network->neuron_count, neuron_count, sizeof(unsigned int) * layer_count);
     unsigned int layer1, layer2, neuron1, neuron2;
     float weight, change;
     Synapse *synapse;
@@ -76,17 +79,20 @@ void nn_dump_to_file(NN *network, FILE *file) {
     assert(network);
     assert(file);
 
+    if (network->layer_count == 0) {
+        printf("Error: Could not find any layers in neural network\n");
+        return;
+    }
+
     // write header
     char structure[255];
     memset(structure, '\0', 255);
-    
-    if (network->layer_count > 0) {
-        sprintf(structure, "%d", network->neuron_count[0]);
-        for (unsigned int i = 1; i < network->layer_count; i++) {
-            sprintf(&structure[strlen(structure)], ":%d", network->neuron_count[i]);
-        }
-        fprintf(file, "[NN-%s<%s>]\r\n", NN_FILE_DUMP_VERSION, structure);
+
+    sprintf(structure, "%d", network->neuron_count[0]);
+    for (unsigned int i = 1; i < network->layer_count; i++) {
+        sprintf(&structure[strlen(structure)], ":%d", network->neuron_count[i]);
     }
+    fprintf(file, "[NN-%s<%s>]\r\n", NN_FILE_DUMP_VERSION, structure);
 
     // write data
     Synapse *synapse;
