@@ -45,8 +45,9 @@ typedef struct {
 
 NN *nn_create(unsigned int, unsigned int *);
 NN *nn_load_from_file(FILE *);
-void nn_dump_to_file(NN *, FILE *, char *);
+void nn_dump_to_file(NN *, FILE *);
 void nn_destroy(NN *);
+size_t nn_size(NN *);
 void nn_add_synapse(NN *, unsigned int, unsigned int, unsigned int, unsigned int);
 void nn_generate_synapses(NN *);
 void nn_set_input(NN *, unsigned int, float);

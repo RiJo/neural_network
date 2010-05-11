@@ -18,6 +18,7 @@ NN *nn_create(unsigned int layers, unsigned int *neurons) {
         }
     }
 
+    network->comment = NULL;
     network->layer_count = layers;
     network->synapses = NULL;
     network->synapse_count = 0;
@@ -43,6 +44,15 @@ void nn_destroy(NN *network) {
     free(network->synapses);
     free(network->comment);
     free(network);
+}
+
+size_t nn_size(NN *network) {
+    return (
+        sizeof(NN) +
+        (sizeof(Synapse) * network->synapse_count) +
+        (sizeof(Neuron) * (network->neuron_count[0] + network->neuron_count[1]+network->neuron_count[2])) +
+        ((network->comment != NULL) ? sizeof(char) * strlen(network->comment) : 0)
+    );
 }
 
 /* Initalize a neural network based upon the data in a prestored file (see the
@@ -105,7 +115,7 @@ NN *nn_load_from_file(FILE *file) {
 
 /* Dump the neural networks data into a file for later use (see the header file
     of this module for more info) */
-void nn_dump_to_file(NN *network, FILE *file, char *comment) {
+void nn_dump_to_file(NN *network, FILE *file) {
     assert(network);
     assert(file);
 
@@ -123,8 +133,8 @@ void nn_dump_to_file(NN *network, FILE *file, char *comment) {
         sprintf(&structure[strlen(structure)], ":%d", network->neuron_count[i]);
     }
     fprintf(file, "[NN-%s<%s>]\r\n", NN_FILE_DUMP_VERSION, structure);
-    if (comment != NULL) {
-        fprintf(file, "%s\r\n", comment);
+    if (network->comment != NULL) {
+        fprintf(file, "%s\r\n", network->comment);
     }
     else {
         fprintf(file, "(no comment)\r\n");

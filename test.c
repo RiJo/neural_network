@@ -32,6 +32,8 @@ TD *generate_train_data(void) {
 int main() {
     unsigned int neurons[] = {2, 5, 2};
     NN *network = nn_create(3, neurons);
+    network->comment = (char *)malloc(sizeof(char) * strlen("this is a comment"));
+    strcpy(network->comment, "this is a comment");
     nn_generate_synapses(network);
     TD *train_data = generate_train_data();
 
@@ -83,7 +85,7 @@ int main() {
     printf("real   2:   %.2f \t%.2f\n\n", nn_read_output(network, 0), nn_read_output(network, 1));
 
     FILE *fp = fopen("test.dmp", "w");
-    nn_dump_to_file(network, fp, "this is a comment");
+    nn_dump_to_file(network, fp);
     fclose(fp);
 
     nn_destroy(network);
