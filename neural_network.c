@@ -27,6 +27,24 @@ NN *nn_create(unsigned int layers, unsigned int *neurons) {
     return network;
 }
 
+/* Free all memory allocated for the neural network */
+void nn_destroy(NN *network) {
+    for (unsigned int layer = 0; layer < network->layer_count; layer++) {
+        for (unsigned int neuron = 0; neuron < network->neuron_count[layer]; neuron++) {
+            neuron_destroy(&(network->layers[layer][neuron]));
+        }
+        free(network->layers[layer]); // free neuron block
+    }
+    free(network->layers);
+    free(network->neuron_count);
+    for (unsigned int synapse = 0; synapse < network->synapse_count; synapse++) {
+        free(network->synapses[synapse]);
+    }
+    free(network->synapses);
+    free(network->comment);
+    free(network);
+}
+
 /* Initalize a neural network based upon the data in a prestored file (see the
     header file of this module for more info) */
 NN *nn_load_from_file(FILE *file) {
@@ -34,11 +52,20 @@ NN *nn_load_from_file(FILE *file) {
 
     // parse header
     char structure[255];
+    char comment[512];
     memset(structure, '\0', 255);
+    memset(comment, '\0', 512);
     if (fscanf (file, "[NN-" NN_FILE_DUMP_VERSION "<%[0123456789:]>]\r\n", structure) != 1) {
         printf("Error: invalid version of neural network dump file. Expected version: %s\n", NN_FILE_DUMP_VERSION);
         return NULL;
     }
+    if (fgets(comment, 512, file) == NULL) {
+        printf("Error: Invalid header, could not parse comment.\n");
+        return NULL;
+    }
+    comment[strlen(comment) - 1] = '\0';
+    comment[strlen(comment) - 1] = '\0';
+
     unsigned int layer_count = 0;
     for (unsigned int i = 0; i < strlen(structure); i++) {
         if (structure[i] == ':') layer_count++;
@@ -57,6 +84,9 @@ NN *nn_load_from_file(FILE *file) {
 
     // create network
     NN *network = nn_create(layer_count, neuron_count);
+    network->comment = (char *)malloc(sizeof(char) * (strlen(comment) + 1));
+    strcpy(network->comment, comment);
+    network->comment[strlen(comment)] = '\0';
     network->layer_count = layer_count;
     network->neuron_count = (unsigned int *)malloc(sizeof(unsigned int) * layer_count);
     memcpy(network->neuron_count, neuron_count, sizeof(unsigned int) * layer_count);
@@ -75,7 +105,7 @@ NN *nn_load_from_file(FILE *file) {
 
 /* Dump the neural networks data into a file for later use (see the header file
     of this module for more info) */
-void nn_dump_to_file(NN *network, FILE *file) {
+void nn_dump_to_file(NN *network, FILE *file, char *comment) {
     assert(network);
     assert(file);
 
@@ -93,10 +123,17 @@ void nn_dump_to_file(NN *network, FILE *file) {
         sprintf(&structure[strlen(structure)], ":%d", network->neuron_count[i]);
     }
     fprintf(file, "[NN-%s<%s>]\r\n", NN_FILE_DUMP_VERSION, structure);
+    if (comment != NULL) {
+        fprintf(file, "%s\r\n", comment);
+    }
+    else {
+        fprintf(file, "(no comment)\r\n");
+    }
 
     // write data
     Synapse *synapse;
     unsigned int layer1, layer2, neuron1, neuron2;
+    layer1 = layer2 = neuron1 = neuron2 = 0;
     for (unsigned int i = 0; i < network->synapse_count; i++) {
         synapse = network->synapses[i];
         for (unsigned int layer = 0; layer < network->layer_count; layer++) {
@@ -113,23 +150,6 @@ void nn_dump_to_file(NN *network, FILE *file) {
         }
         fprintf(file, "%d:%d:%d:%d:%f:%f\r\n", layer1, neuron1, layer2, neuron2, synapse->weight, synapse->change);
     }
-}
-
-/* Free all memory allocated for the neural network */
-void nn_destroy(NN *network) {
-    for (unsigned int layer = 0; layer < network->layer_count; layer++) {
-        for (unsigned int neuron = 0; neuron < network->neuron_count[layer]; neuron++) {
-            neuron_destroy(&(network->layers[layer][neuron]));
-        }
-        free(network->layers[layer]); // free neuron block
-    }
-    free(network->layers);
-    free(network->neuron_count);
-    for (unsigned int synapse = 0; synapse < network->synapse_count; synapse++) {
-        free(network->synapses[synapse]);
-    }
-    free(network->synapses);
-    free(network);
 }
 
 /* Generates a synapse between the given neurons */

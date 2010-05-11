@@ -17,6 +17,7 @@
  /*
     Fixes:
         - rename output/input of neuron (cunfusion with the same values of synapse)
+        - add comment and statistics to dump file (easier to see what kind of data)
 */
 
 #ifndef _NEURAL_NETWORK_H_
@@ -31,7 +32,7 @@
 #include "neuron.h"
 #include "train_data.h"
 
-#define NN_FILE_DUMP_VERSION "1.0"
+#define NN_FILE_DUMP_VERSION "1.1"
 
 typedef struct {
     Neuron **layers;
@@ -39,11 +40,12 @@ typedef struct {
     unsigned int layer_count;
     unsigned int *neuron_count;
     unsigned int synapse_count;
+    char *comment;
 } NN;
 
 NN *nn_create(unsigned int, unsigned int *);
 NN *nn_load_from_file(FILE *);
-void nn_dump_to_file(NN *, FILE *);
+void nn_dump_to_file(NN *, FILE *, char *);
 void nn_destroy(NN *);
 void nn_add_synapse(NN *, unsigned int, unsigned int, unsigned int, unsigned int);
 void nn_generate_synapses(NN *);
