@@ -21,11 +21,6 @@ void neuron_destroy(Neuron *neuron) {
 
 /* calculates the (input) value of the neuron */
 float neuron_value(Neuron *neuron) {
-    if (neuron->input_count == 0) {
-        // neuron in layer 0 (input layer)
-        return neuron->input;
-    }
-
     Synapse *synapse;
     float value = neuron->bias;
     for (unsigned int input = 0; input < neuron->input_count; input++) {
@@ -35,10 +30,16 @@ float neuron_value(Neuron *neuron) {
     return value;
 }
 
-/* produce the output value of the neuron */
+/* produce the output value of the neuron. If it is an input neuron then the
+   output value becomes its input value */
 void neuron_fire(Neuron *neuron) {
-    neuron->input = neuron_value(neuron);
-    neuron->output = neuron_sigmoid(neuron);
+    if (neuron->input_count == 0) {
+        neuron->output = neuron->input;
+    }
+    else {
+        neuron->input = neuron_value(neuron);
+        neuron->output = neuron_sigmoid(neuron);
+    }
 }
 
 /* the transfer function */

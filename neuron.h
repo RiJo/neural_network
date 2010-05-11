@@ -26,10 +26,10 @@ The artificial neuron receives one or more inputs (representing the one or more 
 struct Neuron {
     float bias;
     float input;
-    float output;
+    float output; /* axon */
 
-    Synapse **inputs;
-    Synapse **outputs;
+    Synapse **inputs; /* dendrites */
+    Synapse **outputs; /* synapse */
 
     unsigned int input_count;
     unsigned int output_count;
