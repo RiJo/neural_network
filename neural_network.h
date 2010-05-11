@@ -8,7 +8,8 @@
  * network which is re-calibrated accordingly.
  *
  * Structure of dump file:
- *    [NN-1.0<2:5:2>]
+ *    [NN-1.1<2:5:2>]
+ *    space for comment
  *    layer1:n1:layer2:n2:weight:change
  *    layer1:n1:layer2:n2:weight:change
  *    layer1:n1:layer2:n2:weight:change

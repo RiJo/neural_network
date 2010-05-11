@@ -173,7 +173,7 @@ void nn_add_synapse(NN *network, unsigned int input_layer, unsigned int input_ne
 
     Neuron *input = &network->layers[input_layer][input_neuron];
     Neuron *output = &network->layers[output_layer][output_neuron];
-    Synapse *synapse = synapse_create(input, output);
+    Synapse *synapse = synapse_create(input, output, pow(output_layer, output_layer) / 5.0);
 
     // store synapse reference
     network->synapse_count++;
@@ -316,7 +316,7 @@ void backpropagate_output(NN *network, TD *train_data, float learning_factor, fl
             }
         }
         // recurse
-        backpropagate_hidden(network, deltas, learning_factor, momentum, layer - 1);
+        //~ backpropagate_hidden(network, deltas, learning_factor, momentum, layer - 1);
         free(deltas);
     }
 }

@@ -20,6 +20,6 @@ typedef struct {
     float change; /* last change in weight */
 } Synapse;
 
-Synapse *synapse_create(Neuron *, Neuron *);
+Synapse *synapse_create(Neuron *, Neuron *, float);
 
 #endif

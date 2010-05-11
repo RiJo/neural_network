@@ -1,10 +1,10 @@
 #include "synapse.h"
 
-Synapse *synapse_create(Neuron *input, Neuron *output) {
+Synapse *synapse_create(Neuron *input, Neuron *output, float diff) {
     Synapse *synapse = (Synapse *)malloc(sizeof(Synapse));
     synapse->input = input;
     synapse->output = output;
-    synapse->weight = ((float)rand() / ((float)RAND_MAX / 2.0)) - 1; // (-1.0)-1.0
+    synapse->weight = ((float)rand() / ((float)RAND_MAX / diff)) - (diff / 2);
     synapse->change = 0.0;
     return synapse;
 }
