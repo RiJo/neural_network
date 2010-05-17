@@ -2,6 +2,9 @@
 
 TD *train_data_create(unsigned int inputs, unsigned int outputs) {
     TD *data = (TD *)malloc(sizeof(TD));
+    if (data == NULL) {
+        return NULL;
+    }
     data->input = NULL;
     data->output = NULL;
     data->data_count = 0;
@@ -24,15 +27,27 @@ void train_data_destroy(TD *data) {
 }
 
 void train_data_add(TD *data, float *input, float *output) {
+    assert(data);
+    assert(input);
+    assert(output);
+
     data->data_count++;
 
     // set input data
     data->input = (float **)realloc(data->input, sizeof(float *) * data->data_count);
+    if (data->input == NULL) {
+        fprintf(stderr, "Error: could not allocate memory for train data input values\n");
+        return;
+    }
     data->input[data->data_count - 1] = (float *)malloc(sizeof(float) * data->input_count);
     memcpy(data->input[data->data_count - 1], input, sizeof(float) * data->input_count);
 
     // set output data
     data->output = (float **)realloc(data->output, sizeof(float *) * data->data_count);
+    if (data->output == NULL) {
+        fprintf(stderr, "Error: could not allocate memory for train data output values\n");
+        return;
+    }
     data->output[data->data_count - 1] = (float *)malloc(sizeof(float) * data->output_count);
     memcpy(data->output[data->data_count - 1], output, sizeof(float) * data->output_count);
 }

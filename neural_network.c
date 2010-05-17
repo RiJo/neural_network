@@ -6,10 +6,14 @@ void backpropagate_hidden(NN *, float *, float , float , unsigned int);
 
 /* Initialize the neural network with all neurons */
 NN *nn_create(unsigned int layers, unsigned int *neurons) {
-    srand (time(NULL));
+    assert(layers > 0);
+    assert(neurons);
 
     // allocate memory
     NN *network = (NN *)malloc(sizeof(NN));
+    if (network == NULL) {
+        return NULL;
+    }
     network->layers = (Neuron **)malloc(sizeof(Neuron *) * layers);
     for (unsigned int layer = 0; layer < layers; layer++) {
         network->layers[layer] = (Neuron *)malloc(sizeof(Neuron) * neurons[layer]);
@@ -30,6 +34,8 @@ NN *nn_create(unsigned int layers, unsigned int *neurons) {
 
 /* Free all memory allocated for the neural network */
 void nn_destroy(NN *network) {
+    assert(network);
+
     for (unsigned int layer = 0; layer < network->layer_count; layer++) {
         for (unsigned int neuron = 0; neuron < network->neuron_count[layer]; neuron++) {
             neuron_destroy(&(network->layers[layer][neuron]));
@@ -47,6 +53,8 @@ void nn_destroy(NN *network) {
 }
 
 size_t nn_size(NN *network) {
+    assert(network);
+
     return (
         sizeof(NN) +
         (sizeof(Synapse) * network->synapse_count) +
@@ -94,6 +102,9 @@ NN *nn_load_from_file(FILE *file) {
 
     // create network
     NN *network = nn_create(layer_count, neuron_count);
+    if (network == NULL) {
+        return NULL;
+    }
     network->comment = (char *)malloc(sizeof(char) * (strlen(comment) + 1));
     strcpy(network->comment, comment);
     network->comment[strlen(comment)] = '\0';
@@ -257,6 +268,9 @@ float nn_error_factor(NN *network, TD *train_data) {
 
 /* Backpropagates the network hidden layers recursively */
 void backpropagate_hidden(NN *network, float *previous_deltas, float learning_factor, float momentum, unsigned int layer) {
+    assert(network);
+    assert(previous_deltas);
+
     if (layer == 0) {
         return; // base case
     }
@@ -269,12 +283,12 @@ void backpropagate_hidden(NN *network, float *previous_deltas, float learning_fa
         current_neuron = &network->layers[layer][current];
         error = 0.0;
         for (unsigned int previous = 0; previous < network->neuron_count[layer + 1]; previous++) {
-            error += previous_deltas[previous] * current_neuron->output;
+            error += previous_deltas[previous] * current_neuron->output; // multiply by synapse weight??? find synapse between???
         }
         deltas[current] = error * neuron_dsigmoid(current_neuron);
         for (unsigned int input = 0; input < current_neuron->input_count; input++) {
-            change = current_neuron->inputs[input]->input->output * deltas[current];
             synapse = current_neuron->inputs[input];
+            change = synapse->input->output * deltas[current];
             synapse->weight += (change * learning_factor) + (synapse->change * momentum);
             synapse->change = change;
         }
@@ -316,6 +330,8 @@ void backpropagate_output(NN *network, TD *train_data, float learning_factor, fl
             }
         }
         // recurse
+        /* should this be called before backpropagation is performed on the output
+           layer? */
         //~ backpropagate_hidden(network, deltas, learning_factor, momentum, layer - 1);
         free(deltas);
     }

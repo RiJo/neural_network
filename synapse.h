@@ -7,9 +7,7 @@
 #ifndef _SYNAPSE_H_
 #define _SYNAPSE_H_
 
-#include <stdint.h>
 #include <stdlib.h>
-#include <math.h>
 
 typedef struct Neuron Neuron; // forward declaration
 

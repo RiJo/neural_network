@@ -9,7 +9,9 @@
 #define _TRAIN_DATA_H_
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
+#include <assert.h>
 
 typedef struct {
     float **input;

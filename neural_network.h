@@ -24,12 +24,12 @@
 #ifndef _NEURAL_NETWORK_H_
 #define _NEURAL_NETWORK_H_
 
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
+//#include <stdlib.h>
+//#include <stdint.h>
+//#include <string.h>
 #include <assert.h>
-#include <time.h>
-#include <stdio.h>
+//#include <time.h>
+//#include <stdio.h>
 #include "neuron.h"
 #include "train_data.h"
 
