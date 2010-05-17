@@ -18,18 +18,12 @@
  /*
     Fixes:
         - rename output/input of neuron (cunfusion with the same values of synapse)
-        - add comment and statistics to dump file (easier to see what kind of data)
 */
 
 #ifndef _NEURAL_NETWORK_H_
 #define _NEURAL_NETWORK_H_
 
-//#include <stdlib.h>
-//#include <stdint.h>
-//#include <string.h>
 #include <assert.h>
-//#include <time.h>
-//#include <stdio.h>
 #include "neuron.h"
 #include "train_data.h"
 
