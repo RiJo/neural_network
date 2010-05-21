@@ -82,7 +82,7 @@ NN *nn_load_from_file(FILE *file) {
         fprintf(stderr, "Error: invalid header, could not parse comment.\n");
         return NULL;
     }
-    comment[strlen(comment) - 1] = '\0';
+    comment[strlen(comment) - 2] = '\0';
 
     unsigned int layer_count = 0;
     for (unsigned int i = 0; i < strlen(structure); i++) {
