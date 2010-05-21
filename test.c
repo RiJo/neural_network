@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 
+#define DUMP_FILE "test.dmp"
+
 // forward declaration
 TD *generate_train_data(void);
 
@@ -91,11 +93,11 @@ int main(int argc, char **argv) {
         printf("output 2:   %.2f \t%.2f\n", train_data->output[1][0], train_data->output[1][1]);
         printf("real   2:   %.2f \t%.2f\n\n", nn_read_output(network, 0), nn_read_output(network, 1));
 
-        FILE *fp = fopen("test.dmp", "w");
+        FILE *fp = fopen(DUMP_FILE, "w");
         nn_dump_to_file(network, fp);
         fclose(fp);
-
-        nn_destroy(network);
+        
+        printf("Neural network dumped to file \"%s\"\n\n", DUMP_FILE);
     }
     else {
         printf("\n################################################################################\n");
@@ -131,9 +133,10 @@ int main(int argc, char **argv) {
         printf("input  2:   %.2f \t%.2f\n", train_data->input[1][0], train_data->input[1][1]);
         printf("output 2:   %.2f \t%.2f\n", train_data->output[1][0], train_data->output[1][1]);
         printf("real   2:   %.2f \t%.2f\n\n", nn_read_output(network, 0), nn_read_output(network, 1));
-
-        nn_destroy(network);
-        train_data_destroy(train_data);
     }
+
+    nn_destroy(network);
+    train_data_destroy(train_data);
+
     return 0;
 }

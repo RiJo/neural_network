@@ -82,7 +82,6 @@ NN *nn_load_from_file(FILE *file) {
         return NULL;
     }
     comment[strlen(comment) - 1] = '\0';
-    comment[strlen(comment) - 1] = '\0';
 
     unsigned int layer_count = 0;
     for (unsigned int i = 0; i < strlen(structure); i++) {
@@ -109,8 +108,6 @@ NN *nn_load_from_file(FILE *file) {
     strcpy(network->comment, comment);
     network->comment[strlen(comment)] = '\0';
     network->layer_count = layer_count;
-    network->neuron_count = (unsigned int *)malloc(sizeof(unsigned int) * layer_count);
-    memcpy(network->neuron_count, neuron_count, sizeof(unsigned int) * layer_count);
     unsigned int layer1, layer2, neuron1, neuron2;
     float weight, change;
     Synapse *synapse;
