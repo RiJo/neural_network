@@ -4,8 +4,8 @@
     current version:     0.1.0-b1
     by:                  Rikard Johansson
 
-    Simple neural network written in c. Written in a dynamic way for easy
-    learning of different kinds of data.
+    Simple neural network written in c. Developed in a dynamic way for easy
+    learning of different data types.
 
 --------------------------------------------------------------------------------
 
@@ -13,5 +13,7 @@
 --------------------------------------------------------------------------------
  version 0.1.0, xxxx-xx-xx
 --------------------------------------------------------------------------------
-    * tbd
+    * Train network using backpropagation (only output layer so far)
+    * Dump network to a textfile
+    * Load network from a textfile
 --------------------------------------------------------------------------------
