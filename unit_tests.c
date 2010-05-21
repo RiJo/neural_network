@@ -86,11 +86,11 @@ int main(int argc, char **argv) {
     }
     assert(strcmp(network->comment, loaded->comment) == 0);
 
-    assert(nn_error_factor(network) == nn_error_factor(loaded));
+    assert(nn_error_factor(network, train_data) == nn_error_factor(loaded, train_data));
     for (int data = 0; data < train_data->data_count; data++) {
         for (int input = 0; input < train_data->input_count; input++) {
-            nn_set_input(network, input, train_data->input[input]);
-            nn_set_input(loaded, input, train_data->input[input]);
+            nn_set_input(network, input, *train_data->input[input]);
+            nn_set_input(loaded, input, *train_data->input[input]);
         }
         nn_calculate(network);
         nn_calculate(loaded);
@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
     }
 
     nn_destroy(network);
-    train_data_destroy(data);
+    train_data_destroy(train_data);
 
     printf("ALL TESTS PASSED\n");
 
