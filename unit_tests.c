@@ -12,6 +12,8 @@
 #define SYNAPSE_COUNT ((NEURON_COUNT_INPUT * NEURON_COUNT_HIDDEN) + (NEURON_COUNT_HIDDEN * NEURON_COUNT_OUTPUT))
 
 #define TRAIN_ITERATIONS 100000
+#define ERROR_TOLERANCE 0.00001
+#define OUTPUT_TOLERANCE 0.00001
 
 float input[NEURON_COUNT_INPUT];
 float output[NEURON_COUNT_OUTPUT];
@@ -86,7 +88,10 @@ int main(int argc, char **argv) {
     }
     assert(strcmp(network->comment, loaded->comment) == 0);
 
-    assert(nn_error_factor(network, train_data) == nn_error_factor(loaded, train_data));
+    assert(
+        nn_error_factor(loaded, train_data) > nn_error_factor(network, train_data) - ERROR_TOLERANCE &&
+        nn_error_factor(loaded, train_data) < nn_error_factor(network, train_data) + ERROR_TOLERANCE
+    );
     for (int data = 0; data < train_data->data_count; data++) {
         for (int input = 0; input < train_data->input_count; input++) {
             nn_set_input(network, input, *train_data->input[input]);
@@ -95,7 +100,10 @@ int main(int argc, char **argv) {
         nn_calculate(network);
         nn_calculate(loaded);
         for (int output = 0; output < train_data->output_count; output++) {
-            assert(nn_read_output(network, output) == nn_read_output(loaded, output));
+            assert(
+                nn_read_output(loaded, output) > nn_read_output(network, output) - OUTPUT_TOLERANCE &&
+                nn_read_output(loaded, output) < nn_read_output(network, output) + OUTPUT_TOLERANCE
+            );
         }
     }
 
