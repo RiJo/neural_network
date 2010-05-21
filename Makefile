@@ -6,7 +6,7 @@ CCPROFILE   = -pg
 LDFLAGS     = -lm
 NAME        = test
 
-OBJS        = $(NAME).o                 \
+OBJS        = \
               neural_network.o          \
               neuron.o                  \
               synapse.o                 \
@@ -17,8 +17,11 @@ all: $(NAME)
 debug: CCFLAGS += $(CCDEBUG)
 debug: $(NAME)
 
-$(NAME): $(OBJS) Makefile
-	$(CC) $(CCFLAGS) $(OBJS) $(LDFLAGS) -o $@
+$(NAME): $(OBJS) $(NAME).o Makefile
+	$(CC) $(CCFLAGS) $(OBJS) $(NAME).c $(LDFLAGS) -o $@
+
+unit: $(OBJS) unit_tests.o Makefile
+	$(CC) $(CCFLAGS) $(OBJS) unit_tests.c $(LDFLAGS) -o $@
 
 %.o: %.c
 	$(CC) $(CCFLAGS) $(INCLUDES) -c $< -o $@

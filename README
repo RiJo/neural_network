@@ -16,4 +16,5 @@
     * Train network using backpropagation (only output layer so far)
     * Dump network to a textfile
     * Load network from a textfile
+    * Comment field to make distinction between network dumps
 --------------------------------------------------------------------------------

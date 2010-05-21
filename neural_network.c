@@ -12,6 +12,7 @@ NN *nn_create(unsigned int layers, unsigned int *neurons) {
     // allocate memory
     NN *network = (NN *)malloc(sizeof(NN));
     if (network == NULL) {
+        fprintf(stderr, "Error: could not allocate memory for neural network\n");
         return NULL;
     }
     network->layers = (Neuron **)malloc(sizeof(Neuron *) * layers);
@@ -74,11 +75,11 @@ NN *nn_load_from_file(FILE *file) {
     memset(structure, '\0', 255);
     memset(comment, '\0', 512);
     if (fscanf (file, "[NN-" NN_FILE_DUMP_VERSION "<%[0123456789:]>]\r\n", structure) != 1) {
-        printf("Error: invalid version of neural network dump file. Expected version: %s\n", NN_FILE_DUMP_VERSION);
+        fprintf(stderr, "Error: invalid version of neural network dump file. Expected version: %s\n", NN_FILE_DUMP_VERSION);
         return NULL;
     }
     if (fgets(comment, 512, file) == NULL) {
-        printf("Error: Invalid header, could not parse comment.\n");
+        fprintf(stderr, "Error: invalid header, could not parse comment.\n");
         return NULL;
     }
     comment[strlen(comment) - 1] = '\0';
@@ -88,7 +89,7 @@ NN *nn_load_from_file(FILE *file) {
         if (structure[i] == ':') layer_count++;
     }
     if (layer_count == 0) {
-        printf("Error: Could not find any layers in neural network dump file\n");
+        fprintf(stderr, "Error: could not find any layers in neural network dump file\n");
         return NULL;
     }
     layer_count++;
@@ -128,7 +129,7 @@ void nn_dump_to_file(NN *network, FILE *file) {
     assert(file);
 
     if (network->layer_count == 0) {
-        printf("Error: Could not find any layers in neural network\n");
+        fprintf(stderr, "Error: could not find any layers in neural network\n");
         return;
     }
 
@@ -168,6 +169,20 @@ void nn_dump_to_file(NN *network, FILE *file) {
         }
         fprintf(file, "%d:%d:%d:%d:%f:%f\r\n", layer1, neuron1, layer2, neuron2, synapse->weight, synapse->change);
     }
+}
+
+/* Sets the comment field in the neural network which is used when dumping the
+ * structure to a file */
+void nn_set_comment(NN *network, const char *comment) {
+    assert(network);
+    assert(comment);
+
+    network->comment = (char *)malloc(sizeof(char) * (strlen(comment) + 1));
+    if (network->comment == NULL) {
+        fprintf(stderr, "Error: could not allocate memory for neural network comment\n");
+        return;
+    }
+    strcpy(network->comment, comment);
 }
 
 /* Generates a synapse between the given neurons */
