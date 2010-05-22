@@ -177,6 +177,9 @@ void nn_set_comment(NN *network, const char *comment) {
     assert(network);
     assert(comment);
 
+    if (network->comment != NULL) {
+        free(network->comment);
+    }
     network->comment = (char *)malloc(sizeof(char) * (strlen(comment) + 1));
     if (network->comment == NULL) {
         fprintf(stderr, "Error: could not allocate memory for neural network comment\n");
