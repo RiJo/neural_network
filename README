@@ -1,8 +1,9 @@
 --------------------------------------------------------------------------------
 
-    neural_network
-    current version:     0.1.0-b1
-    by:                  Rikard Johansson
+    Neural Network
+
+    Current version:     0.1.0
+    Author:              Rikard Johansson
 
     Simple neural network written in c. Developed in a dynamic way for easy
     learning of different data types.
@@ -11,7 +12,7 @@
 
 
 --------------------------------------------------------------------------------
- version 0.1.0, xxxx-xx-xx
+ version 0.1.0, 2010-11-20
 --------------------------------------------------------------------------------
     * Train network using backpropagation (only output layer so far)
     * Dump network to a textfile
