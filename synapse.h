@@ -19,5 +19,6 @@ typedef struct {
 } Synapse;
 
 Synapse *synapse_create(Neuron *, Neuron *, float);
+void synapse_destroy(Synapse *);
 
 #endif

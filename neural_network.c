@@ -46,7 +46,7 @@ void nn_destroy(NN *network) {
     free(network->layers);
     free(network->neuron_count);
     for (unsigned int synapse = 0; synapse < network->synapse_count; synapse++) {
-        free(network->synapses[synapse]);
+        synapse_destroy(network->synapses[synapse]);
     }
     free(network->synapses);
     free(network->comment);
