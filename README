@@ -14,7 +14,7 @@
     which we converted to a polygon and passed to the neural network. I wanted
     to train the network on my computer to make loading time more efficient on
     the embedded device, which is the reason for simple dump and load from a
-    textfile which works quite well.
+    textfile.
 
 --------------------------------------------------------------------------------
 
