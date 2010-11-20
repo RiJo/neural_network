@@ -10,6 +10,8 @@ void neuron_init(Neuron *neuron) {
     neuron->output_count = 0;
 }
 
+/* This function differ from other *_destroy(), because it does not free the
+   given parameter. Either fix it to handle it, or rename the function. */
 void neuron_destroy(Neuron *neuron) {
     free(neuron->inputs);
     free(neuron->outputs);
