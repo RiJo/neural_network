@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
 
         unsigned int neurons[] = {2, 5, 2};
         network = nn_create(3, neurons);
-        network->comment = (char *)malloc(sizeof(char) * strlen("this is a comment"));
+        network->comment = (char *)malloc(sizeof(char) * strlen("this is a comment") + 1);
         strcpy(network->comment, "this is a comment");
         nn_generate_synapses(network);
 
