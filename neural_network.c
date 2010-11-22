@@ -3,6 +3,7 @@
 // forward declaration of private functions
 void backpropagate_output(NN *, TD *, float , float);
 void backpropagate_hidden(NN *, float *, float , float , unsigned int);
+int nn_connected(NN *);
 
 /* Initialize the neural network with all neurons */
 NN *nn_create(unsigned int layers, unsigned int *neurons) {
@@ -355,9 +356,36 @@ void backpropagate_output(NN *network, TD *train_data, float learning_factor, fl
 /* train the neural network with the defined data */
 float nn_train(NN *network, TD *train_data, float learning_factor, float momentum) {
     assert(network);
+    assert(nn_connected(network));
     assert(train_data);
 
     float error = nn_error_factor(network, train_data);
     backpropagate_output(network, train_data, learning_factor, momentum);
     return nn_error_factor(network, train_data) - error;
+}
+
+/* checks weather all input nodes are connected to all output nodes */
+/* TODO: check that there exists at least on connection from each input node to
+   some output node. Also do the same for output nodes to make sure all outputs
+   can be activated by inputs. There must be some graph algorithm for this. */
+int nn_connected(NN *network) {
+    Neuron *current_neuron;
+
+    // Check input layer
+    int layer = 0;
+    for (unsigned int neuron = 0; neuron < network->neuron_count[layer]; neuron++) {
+        current_neuron = &network->layers[layer][neuron];
+        if (current_neuron->output_count == 0)
+            return 0;
+    }
+
+    // Check output layer
+    layer = network->layer_count - 1;
+    for (unsigned int neuron = 0; neuron < network->neuron_count[layer]; neuron++) {
+        current_neuron = &network->layers[layer][neuron];
+        if (current_neuron->input_count == 0)
+            return 0;
+    }
+
+    return 1;
 }
