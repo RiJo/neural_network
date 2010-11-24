@@ -21,8 +21,8 @@ typedef struct {
     unsigned int output_count;
 } TD;
 
-TD *train_data_create(unsigned int, unsigned int);
-void train_data_destroy(TD *);
-void train_data_add(TD *, float *, float *);
+TD *td_create(unsigned int, unsigned int);
+void td_destroy(TD *);
+void td_add(TD *, float *, float *);
 
 #endif

@@ -11,7 +11,7 @@ TD *generate_train_data(void) {
     unsigned int inputs = 2;
     unsigned int outputs = 2;
 
-    TD *data = train_data_create(inputs, outputs);
+    TD *data = td_create(inputs, outputs);
 
     float input[inputs];
     float output[outputs];
@@ -20,13 +20,13 @@ TD *generate_train_data(void) {
     input[1] = 0.25;
     output[0] = -0.25;
     output[1] = 0.75;
-    train_data_add(data, input, output);
+    td_add(data, input, output);
 
     input[0] = 0.25;
     input[1] = 0.75;
     output[0] = 1.0;
     output[1] = 0.0;
-    train_data_add(data, input, output);
+    td_add(data, input, output);
 
     return data;
 }
@@ -115,7 +115,7 @@ int main(int argc, char **argv) {
     }
 
     nn_destroy(network);
-    train_data_destroy(train_data);
+    td_destroy(train_data);
 
     return EXIT_SUCCESS;
 }
