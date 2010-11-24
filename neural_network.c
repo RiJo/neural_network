@@ -228,6 +228,7 @@ void nn_add_synapse(NN *network, unsigned int input_layer, unsigned int input_ne
 /* Generate a synapse between all neurons at the border between the layers */
 void nn_generate_synapses(NN *network) {
     assert(network);
+    assert(network->synapse_count == 0);
 
     for (unsigned int layer = 1; layer < network->layer_count; layer++) {
         for (unsigned int neuron1 = 0; neuron1 < network->neuron_count[layer - 1]; neuron1++) {
