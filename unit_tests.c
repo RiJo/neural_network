@@ -154,12 +154,13 @@ int main(int argc, char **argv) {
     float previous_error = 1.0;
     for (unsigned int i = 0; i < TRAIN_ITERATIONS; i++) {
         (void)nn_train(network, train_data, learning_factor, momentum);
+        float current_error = nn_error_factor(network, train_data);
+        assert(current_error < previous_error + 0.0001);
         if (i % 10000 == 0) {
-            float current_error = nn_error_factor(network, train_data);
-            assert(current_error < previous_error);
-            //~ printf("    error: %.2f%%\n", current_error * 100);
-            previous_error = current_error;
+            printf("    error: %.2f%%\n", current_error * 100);
+            
         }
+        previous_error = current_error;
     }
 
     // Dump structure to file
