@@ -56,18 +56,22 @@ int main(int argc, char **argv) {
 
     if (argc == 1) {
         printf("\n################################################################################\n");
-        printf("Creating new neural network\n\n");
+        printf("Creating new neural network\n");
 
         unsigned int neurons[] = {2, 5, 2};
         network = nn_create(3, neurons);
         network->comment = (char *)malloc(sizeof(char) * strlen("this is a comment") + 1);
         strcpy(network->comment, "this is a comment");
+
+        printf("Network inputs: %d   hidden: %d   outputs: %d\n\n", network->neuron_count[0], network->neuron_count[1], network->neuron_count[2]);
+        
+        printf("Network is connected: %d\n", nn_connected(network));
+        printf("Generating synapses\n");
         nn_generate_synapses(network);
-
-        printf("\nNetwork inputs: %d   hidden: %d   outputs: %d\n", network->neuron_count[0], network->neuron_count[1], network->neuron_count[2]);
         printf("Network synapses: %d\n", network->synapse_count);
+        printf("Network is connected: %d\n\n", nn_connected(network));
 
-        printf("\nResults before training:");
+        printf("Results before training:");
         show_results(network, train_data);
 
         float learning_factor = 0.5;
