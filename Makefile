@@ -20,6 +20,7 @@ debug: $(NAME)
 $(NAME): $(OBJS) $(NAME).o Makefile
 	$(CC) $(CCFLAGS) $(OBJS) $(NAME).c $(LDFLAGS) -o $@
 
+unit: CCFLAGS += $(CCDEBUG)
 unit: $(OBJS) unit_tests.o Makefile
 	$(CC) $(CCFLAGS) $(OBJS) unit_tests.c $(LDFLAGS) -o $@
 
