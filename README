@@ -22,8 +22,15 @@
 --------------------------------------------------------------------------------
  version 0.1.0, 2010-11-20
 --------------------------------------------------------------------------------
-    * Train network using backpropagation (only output layer so far)
+    * Train network using backpropagation (only output layer)
     * Dump network to a textfile
     * Load network from a textfile
     * Comment field to make distinction between network dumps
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+ version 0.2.0, xxxx-xx-xx
+--------------------------------------------------------------------------------
+    * New function: nn_connected()
 --------------------------------------------------------------------------------
