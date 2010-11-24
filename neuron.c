@@ -14,7 +14,9 @@ void neuron_init(Neuron *neuron) {
    given parameter. Either fix it to handle it, or rename the function. */
 void neuron_destroy(Neuron *neuron) {
     free(neuron->inputs);
+    neuron->inputs = NULL;
     free(neuron->outputs);
+    neuron->outputs = NULL;
 
     /* this is done from outside, all neurons are allocated by realloc and is
        therefore allocated in one block! */

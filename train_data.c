@@ -17,12 +17,16 @@ void train_data_destroy(TD *data) {
     unsigned int i;
     for (i = 0; i < data->input_count; i++) {
         free(data->input[i]);
+        data->input[i] = NULL;
     }
     free(data->input);
+    data->input = NULL;
     for (i = 0; i < data->output_count; i++) {
         free(data->output[i]);
+        data->output[i] = NULL;
     }
     free(data->output);
+    data->output = NULL;
     free(data);
 }
 

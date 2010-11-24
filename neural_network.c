@@ -3,7 +3,7 @@
 // forward declaration of private functions
 void backpropagate_output(NN *, TD *, float , float);
 void backpropagate_hidden(NN *, float *, float , float , unsigned int);
-int nn_connected(NN *);
+int nn_path_between(Neuron *, Neuron *);
 
 /* Initialize the neural network with all neurons */
 NN *nn_create(unsigned int layers, unsigned int *neurons) {
@@ -43,14 +43,20 @@ void nn_destroy(NN *network) {
             neuron_destroy(&(network->layers[layer][neuron]));
         }
         free(network->layers[layer]); // free neuron block
+        network->layers[layer] = NULL;
     }
     free(network->layers);
+    network->layers = NULL;
     free(network->neuron_count);
+    network->neuron_count = NULL;
     for (unsigned int synapse = 0; synapse < network->synapse_count; synapse++) {
         synapse_destroy(network->synapses[synapse]);
     }
     free(network->synapses);
+    network->synapses = NULL;
     free(network->comment);
+    network->comment = NULL;
+
     free(network);
 }
 
@@ -180,6 +186,7 @@ void nn_set_comment(NN *network, const char *comment) {
 
     if (network->comment != NULL) {
         free(network->comment);
+        network->comment = NULL;
     }
     network->comment = (char *)malloc(sizeof(char) * (strlen(comment) + 1));
     if (network->comment == NULL) {
@@ -364,28 +371,37 @@ float nn_train(NN *network, TD *train_data, float learning_factor, float momentu
     return nn_error_factor(network, train_data) - error;
 }
 
-/* checks weather all input nodes are connected to all output nodes */
-/* TODO: check that there exists at least on connection from each input node to
-   some output node. Also do the same for output nodes to make sure all outputs
-   can be activated by inputs. There must be some graph algorithm for this. */
+/* checks weather there are synapses between all input neurons and the output
+   neurons */
+/* TODO: implement check for output->input */
 int nn_connected(NN *network) {
-    Neuron *current_neuron;
-
-    // Check input layer
-    int layer = 0;
-    for (unsigned int neuron = 0; neuron < network->neuron_count[layer]; neuron++) {
-        current_neuron = &network->layers[layer][neuron];
-        if (current_neuron->output_count == 0)
+    int connected;
+    
+    // Check if all inputs are connected to any output
+    for (unsigned int input = 0; input < network->neuron_count[0]; input++) {
+        connected = 0;
+        for (unsigned int output = 0; output < network->neuron_count[network->layer_count - 1]; output++) {
+            connected = nn_path_between(network->layers[0] + input, network->layers[network->layer_count - 1] + output);
+            if (connected)
+                break;
+        }
+        if (!connected)
             return 0;
     }
-
-    // Check output layer
-    layer = network->layer_count - 1;
-    for (unsigned int neuron = 0; neuron < network->neuron_count[layer]; neuron++) {
-        current_neuron = &network->layers[layer][neuron];
-        if (current_neuron->input_count == 0)
-            return 0;
-    }
-
     return 1;
+}
+
+/* checks weather there are a path (synapses) between the given neurons */
+/* TODO: implement check whole graph structure */
+int nn_path_between(Neuron *source, Neuron *destination) {
+    Synapse *synapse;
+    Neuron *neuron;
+
+    for (unsigned int output = 0; output < source->output_count; output++) {
+        synapse = source->outputs[output];
+        neuron = synapse->output;
+        if (neuron == destination || nn_path_between(neuron, destination))
+            return 1;
+    }
+    return 0;
 }
