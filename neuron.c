@@ -1,5 +1,9 @@
 #include "neuron.h"
 
+// forward declaration of private functions
+float sigmoid(float);
+float dsigmoid(float);
+
 void neuron_init(Neuron *neuron) {
     neuron->input = 0.0;
     neuron->output = 0.0;
@@ -8,6 +12,8 @@ void neuron_init(Neuron *neuron) {
     neuron->outputs = NULL;
     neuron->input_count = 0;
     neuron->output_count = 0;
+    neuron->sigmoid_function = sigmoid;
+    neuron->dsigmoid_function = dsigmoid;
 }
 
 /* This function differ from other *_destroy(), because it does not free the
@@ -48,10 +54,24 @@ void neuron_fire(Neuron *neuron) {
 
 /* the transfer function */
 float neuron_sigmoid(Neuron *neuron) {
-    return tanh(neuron->input);
+    assert(neuron->sigmoid_function);
+
+    return neuron->sigmoid_function(neuron->input);
 }
 
 /* derivative of the sigmoid function */
 float neuron_dsigmoid(Neuron *neuron) {
-    return 1.0 - pow(neuron->output, 2);
+    assert (neuron->dsigmoid_function);
+
+    return neuron->dsigmoid_function(neuron->output);
+}
+
+/* the default sigmoid function */
+float sigmoid(float value) {
+    return tanh(value);
+}
+
+/* the default delta sigmoid function */
+float dsigmoid(float value) {
+    return 1.0 - pow(value, 2);
 }

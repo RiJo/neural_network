@@ -9,6 +9,7 @@
 #ifndef _NEURON_H_
 #define _NEURON_H_
 
+#include <assert.h>
 #include <math.h>
 
 #include "synapse.h"
@@ -25,6 +26,9 @@ struct Neuron {
 
     unsigned int input_count;
     unsigned int output_count;
+
+    float (*sigmoid_function)(float);
+    float (*dsigmoid_function)(float);
 };
 
 void neuron_init(Neuron *);
@@ -33,5 +37,8 @@ void neuron_fire(Neuron *);
 float neuron_value(Neuron *);
 float neuron_sigmoid(Neuron *);
 float neuron_dsigmoid(Neuron *);
+
+//void neuron_set_sigmoid(Neuron *, float (*)(float)); /* not implemented */
+//void neuron_set_dsigmoid(Neuron *, float (*)(float)); /* not implemented */
 
 #endif
