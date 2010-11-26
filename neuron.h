@@ -38,7 +38,7 @@ float neuron_value(Neuron *);
 float neuron_sigmoid(Neuron *);
 float neuron_dsigmoid(Neuron *);
 
-//void neuron_set_sigmoid(Neuron *, float (*)(float)); /* not implemented */
-//void neuron_set_dsigmoid(Neuron *, float (*)(float)); /* not implemented */
+void neuron_set_sigmoid(Neuron *, float (*)(float));
+void neuron_set_dsigmoid(Neuron *, float (*)(float));
 
 #endif
