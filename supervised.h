@@ -12,6 +12,6 @@
 #endif
 
 float nn_error_factor(NN *, TD *);
-float nn_train(NN *, TD *, float, float);
+float nn_train(NN *, TD *);
 
 #endif

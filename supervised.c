@@ -1,8 +1,8 @@
 #include "supervised.h"
 
 // forward declaration of private functions
-void backpropagate_output(NN *, TD *, float , float);
-void backpropagate_hidden(NN *, float *, float , float , unsigned int);
+void backpropagate_output(NN *, TD *);
+void backpropagate_hidden(NN *, float *, unsigned int);
 
 /* Returns the current error factor of the neural network */
 float nn_error_factor(NN *network, TD *train_data) {
@@ -30,7 +30,7 @@ float nn_error_factor(NN *network, TD *train_data) {
 }
 
 /* Backpropagates the network hidden layers recursively */
-void backpropagate_hidden(NN *network, float *previous_deltas, float learning_factor, float momentum, unsigned int layer) {
+void backpropagate_hidden(NN *network, float *previous_deltas, unsigned int layer) {
 #ifdef DEBUG
     assert(network);
     assert(previous_deltas);
@@ -54,18 +54,17 @@ void backpropagate_hidden(NN *network, float *previous_deltas, float learning_fa
         for (unsigned int input = 0; input < current_neuron->input_count; input++) {
             synapse = current_neuron->inputs[input];
             change = synapse->input->output * deltas[current];
-            synapse->weight += (change * learning_factor) + (synapse->change * momentum);
-            synapse->change = change;
+            synapse_change(synapse, change);
         }
     }
 
     // recurse
-    backpropagate_hidden(network, deltas, learning_factor, momentum, layer - 1);
+    backpropagate_hidden(network, deltas, layer - 1);
     free(deltas);
 }
 
 /* Backpropagates the network outputs */
-void backpropagate_output(NN *network, TD *train_data, float learning_factor, float momentum) {
+void backpropagate_output(NN *network, TD *train_data) {
 #ifdef DEBUG
     assert(network);
     assert(train_data);
@@ -92,20 +91,19 @@ void backpropagate_output(NN *network, TD *train_data, float learning_factor, fl
             for (unsigned int input = 0; input < current_neuron->input_count; input++) {
                 change = current_neuron->inputs[input]->input->output * deltas[neuron];
                 synapse = current_neuron->inputs[input];
-                synapse->weight += (change * learning_factor) + (synapse->change * momentum);
-                synapse->change = change;
+                synapse_change(synapse, change);
             }
         }
         // recurse
         /* should this be called before backpropagation is performed on the output
            layer? */
-        //~ backpropagate_hidden(network, deltas, learning_factor, momentum, layer - 1);
+        //~ backpropagate_hidden(network, deltas layer - 1);
         free(deltas);
     }
 }
 
 /* train the neural network with the defined data */
-float nn_train(NN *network, TD *train_data, float learning_factor, float momentum) {
+float nn_train(NN *network, TD *train_data) {
 #ifdef DEBUG
     assert(network);
     assert(train_data);
@@ -113,6 +111,6 @@ float nn_train(NN *network, TD *train_data, float learning_factor, float momentu
 #endif
 
     float error = nn_error_factor(network, train_data);
-    backpropagate_output(network, train_data, learning_factor, momentum);
+    backpropagate_output(network, train_data);
     return nn_error_factor(network, train_data) - error;
 }

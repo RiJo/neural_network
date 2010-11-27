@@ -19,9 +19,13 @@ typedef struct {
     Neuron *output;
     float weight; /* 0 if no connection */
     float change; /* last change in weight */
+
+    float momentum;
+    float learning_factor;
 } Synapse;
 
 Synapse *synapse_create(Neuron *, Neuron *, float);
 void synapse_destroy(Synapse *);
+void synapse_change(Synapse *, float);
 
 #endif

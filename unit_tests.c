@@ -90,12 +90,10 @@ void mirror_test() {
     nn_generate_synapses(network);
 
     // Train neural network with train data
-    float learning_factor = 0.5;
-    float momentum = 0.1;
     printf("\n  Training...\n");
     float previous_error = 1.0;
     for (unsigned int i = 0; i < TRAIN_ITERATIONS; i++) {
-        (void)nn_train(network, train_data, learning_factor, momentum);
+        (void)nn_train(network, train_data);
         if (i % 10000 == 0) {
             float current_error = nn_error_factor(network, train_data);
             //~ assert(current_error < previous_error);
@@ -149,12 +147,10 @@ int main(int argc, char **argv) {
     assert(network->comment);
 
     // Train neural network with train data
-    float learning_factor = 0.5;
-    float momentum = 0.1;
     test_announce("learning rate");
     float previous_error = 1.0;
     for (unsigned int i = 0; i < TRAIN_ITERATIONS; i++) {
-        (void)nn_train(network, train_data, learning_factor, momentum);
+        (void)nn_train(network, train_data);
         float current_error = nn_error_factor(network, train_data);
         assert(current_error < previous_error + 0.0001);
         if (i % 10000 == 0) {
