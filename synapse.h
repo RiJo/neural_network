@@ -19,9 +19,8 @@ typedef struct {
     Neuron *output;
     float weight; /* 0 if no connection */
     float change; /* last change in weight */
-
-    float momentum;
-    float learning_factor;
+    float momentum; /* how much the last change will affect the new one */
+    float learn_rate; /* the intensity of the change value */
 } Synapse;
 
 Synapse *synapse_create(Neuron *, Neuron *, float);

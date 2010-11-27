@@ -15,8 +15,8 @@ Synapse *synapse_create(Neuron *input, Neuron *output, float diff) {
     synapse->weight = ((float)rand() / ((float)RAND_MAX / diff)) - (diff / 2);
     synapse->change = 0.0;
     
-    synapse->momentum = 0.1;
-    synapse->learning_factor = 0.5;
+    synapse->momentum = 0.05;
+    synapse->learn_rate = 0.25;
     return synapse;
 }
 
@@ -33,6 +33,6 @@ void synapse_change(Synapse *synapse, float value) {
     assert(synapse);
 #endif
 
-    synapse->weight += (value * synapse->learning_factor) + (synapse->change * synapse->momentum);
+    synapse->weight += (value * synapse->learn_rate) + (synapse->change * synapse->momentum);
     synapse->change = value;
 }

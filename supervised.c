@@ -51,15 +51,33 @@ void backpropagate_hidden(NN *network, float *previous_deltas, unsigned int laye
             error += previous_deltas[previous] * current_neuron->output; // multiply by synapse weight??? find synapse between???
         }
         deltas[current] = error * neuron_dsigmoid(current_neuron);
+        /*for (unsigned int input = 0; input < current_neuron->input_count; input++) {
+            synapse = current_neuron->inputs[input];
+            change = synapse->input->output * deltas[current];
+            synapse_change(synapse, change);
+        }*/
+    }
+
+    // recurse
+    backpropagate_hidden(network, deltas, layer - 1);
+
+    /* TEST */
+    // update values
+    for (unsigned int current = 0; current < network->neuron_count[layer]; current++) {
+        current_neuron = &network->layers[layer][current];
+        /*error = 0.0;
+        for (unsigned int previous = 0; previous < network->neuron_count[layer + 1]; previous++) {
+            error += previous_deltas[previous] * current_neuron->output; // multiply by synapse weight??? find synapse between???
+        }
+        deltas[current] = error * neuron_dsigmoid(current_neuron);*/
         for (unsigned int input = 0; input < current_neuron->input_count; input++) {
             synapse = current_neuron->inputs[input];
             change = synapse->input->output * deltas[current];
             synapse_change(synapse, change);
         }
     }
+    /* TEST */
 
-    // recurse
-    backpropagate_hidden(network, deltas, layer - 1);
     free(deltas);
 }
 
@@ -88,16 +106,30 @@ void backpropagate_output(NN *network, TD *train_data) {
             current_neuron = &network->layers[layer][neuron];
             error = train_data->output[test][neuron] - current_neuron->output;
             deltas[neuron] = error * neuron_dsigmoid(current_neuron);
+            /*for (unsigned int input = 0; input < current_neuron->input_count; input++) {
+                change = current_neuron->inputs[input]->input->output * deltas[neuron];
+                synapse = current_neuron->inputs[input];
+                synapse_change(synapse, change);
+            }*/
+        }
+        // recurse
+        backpropagate_hidden(network, deltas, layer - 1);
+        /* TEST */
+        // update values
+        for (unsigned int neuron = 0; neuron < network->neuron_count[layer]; neuron++) {
+            current_neuron = &network->layers[layer][neuron];
+            /*error = train_data->output[test][neuron] - current_neuron->output;
+            deltas[neuron] = error * neuron_dsigmoid(current_neuron);*/
             for (unsigned int input = 0; input < current_neuron->input_count; input++) {
                 change = current_neuron->inputs[input]->input->output * deltas[neuron];
                 synapse = current_neuron->inputs[input];
                 synapse_change(synapse, change);
             }
         }
-        // recurse
+        /* TEST */
         /* should this be called before backpropagation is performed on the output
-           layer? */
-        //~ backpropagate_hidden(network, deltas layer - 1);
+           layer? because the output of each layer (input to next) will change. */
+        
         free(deltas);
     }
 }
