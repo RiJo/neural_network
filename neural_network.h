@@ -18,10 +18,12 @@
 #ifndef _NEURAL_NETWORK_H_
 #define _NEURAL_NETWORK_H_
 
+#include "neuron.h"
 #include <stdio.h>
 #include <string.h>
+#ifdef DEBUG
 #include <assert.h>
-#include "neuron.h"
+#endif
 
 #define NN_FILE_DUMP_VERSION "1.1"
 

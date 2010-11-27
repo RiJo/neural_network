@@ -6,8 +6,10 @@ void backpropagate_hidden(NN *, float *, float , float , unsigned int);
 
 /* Returns the current error factor of the neural network */
 float nn_error_factor(NN *network, TD *train_data) {
+#ifdef DEBUG
     assert(network);
     assert(train_data);
+#endif
 
     float error = 0.0;
     float test_error;
@@ -29,8 +31,10 @@ float nn_error_factor(NN *network, TD *train_data) {
 
 /* Backpropagates the network hidden layers recursively */
 void backpropagate_hidden(NN *network, float *previous_deltas, float learning_factor, float momentum, unsigned int layer) {
+#ifdef DEBUG
     assert(network);
     assert(previous_deltas);
+#endif
 
     if (layer == 0) {
         return; // base case
@@ -62,8 +66,10 @@ void backpropagate_hidden(NN *network, float *previous_deltas, float learning_fa
 
 /* Backpropagates the network outputs */
 void backpropagate_output(NN *network, TD *train_data, float learning_factor, float momentum) {
+#ifdef DEBUG
     assert(network);
     assert(train_data);
+#endif
 
     unsigned int layer = network->layer_count - 1;
 
@@ -100,9 +106,11 @@ void backpropagate_output(NN *network, TD *train_data, float learning_factor, fl
 
 /* train the neural network with the defined data */
 float nn_train(NN *network, TD *train_data, float learning_factor, float momentum) {
+#ifdef DEBUG
     assert(network);
-    assert(nn_connected(network));
     assert(train_data);
+    assert(nn_connected(network));
+#endif
 
     float error = nn_error_factor(network, train_data);
     backpropagate_output(network, train_data, learning_factor, momentum);

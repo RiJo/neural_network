@@ -5,8 +5,10 @@ int nn_path_between(Neuron *, Neuron *);
 
 /* Initialize the neural network with all neurons */
 NN *nn_create(unsigned int layers, unsigned int *neurons) {
+#ifdef DEBUG
     assert(layers > 0);
     assert(neurons);
+#endif
 
     // allocate memory
     NN *network = (NN *)malloc(sizeof(NN));
@@ -34,7 +36,9 @@ NN *nn_create(unsigned int layers, unsigned int *neurons) {
 
 /* Free all memory allocated for the neural network */
 void nn_destroy(NN *network) {
+#ifdef DEBUG
     assert(network);
+#endif
 
     for (unsigned int layer = 0; layer < network->layer_count; layer++) {
         for (unsigned int neuron = 0; neuron < network->neuron_count[layer]; neuron++) {
@@ -59,7 +63,9 @@ void nn_destroy(NN *network) {
 }
 
 size_t nn_size(NN *network) {
+#ifdef DEBUG
     assert(network);
+#endif
 
     return (
         sizeof(NN) +
@@ -72,7 +78,9 @@ size_t nn_size(NN *network) {
 /* Initalize a neural network based upon the data in a prestored file (see the
     header file of this module for more info) */
 NN *nn_load_from_file(FILE *file) {
+#ifdef DEBUG
     assert(file);
+#endif
 
     // parse header
     char structure[255];
@@ -130,8 +138,10 @@ NN *nn_load_from_file(FILE *file) {
 /* Dump the neural networks data into a file for later use (see the header file
     of this module for more info) */
 void nn_dump_to_file(NN *network, FILE *file) {
+#ifdef DEBUG
     assert(network);
     assert(file);
+#endif
 
     if (network->layer_count == 0) {
         fprintf(stderr, "Error: could not find any layers in neural network\n");
@@ -179,8 +189,10 @@ void nn_dump_to_file(NN *network, FILE *file) {
 /* Sets the comment field in the neural network which is used when dumping the
  * structure to a file */
 void nn_set_comment(NN *network, const char *comment) {
+#ifdef DEBUG
     assert(network);
     assert(comment);
+#endif
 
     if (network->comment != NULL) {
         free(network->comment);
@@ -197,11 +209,13 @@ void nn_set_comment(NN *network, const char *comment) {
 /* Generates a synapse between the given neurons */
 void nn_add_synapse(NN *network, unsigned int input_layer, unsigned int input_neuron,
         unsigned int output_layer, unsigned int output_neuron) {
+#ifdef DEBUG
     assert(network);
     assert(input_layer < network->layer_count);
     assert(output_layer < network->layer_count);
     assert(input_neuron < network->neuron_count[input_layer]);
     assert(output_neuron < network->neuron_count[output_layer]);
+#endif
 
     Neuron *input = &network->layers[input_layer][input_neuron];
     Neuron *output = &network->layers[output_layer][output_neuron];
@@ -225,8 +239,10 @@ void nn_add_synapse(NN *network, unsigned int input_layer, unsigned int input_ne
 
 /* Generate a synapse between all neurons at the border between the layers */
 void nn_generate_synapses(NN *network) {
+#ifdef DEBUG
     assert(network);
     assert(network->synapse_count == 0);
+#endif
 
     for (unsigned int layer = 1; layer < network->layer_count; layer++) {
         for (unsigned int neuron1 = 0; neuron1 < network->neuron_count[layer - 1]; neuron1++) {
@@ -239,16 +255,20 @@ void nn_generate_synapses(NN *network) {
 
 /* Sets an input neuron to a given value */
 void nn_set_input(NN *network, unsigned int index, float value) {
+#ifdef DEBUG
     assert(network);
     assert(index < network->neuron_count[0]);
+#endif
 
     network->layers[0][index].input = value;
 }
 
 /* Reads the current value of the given output neuron */
 float nn_read_output(NN *network, unsigned int index) {
+#ifdef DEBUG
     assert(network);
     assert(index < network->layer_count);
+#endif
 
     return network->layers[network->layer_count - 1][index].output;
 }
@@ -256,7 +276,9 @@ float nn_read_output(NN *network, unsigned int index) {
 /* Recalculate the neural network and set the out put neurons dependent on the
     states of the input neurons */
 void nn_calculate(NN *network) {
+#ifdef DEBUG
     assert(network);
+#endif
 
     for (unsigned int layer = 0; layer < network->layer_count; layer++) {
         for (unsigned int neuron = 0; neuron < network->neuron_count[layer]; neuron++) {
@@ -269,6 +291,10 @@ void nn_calculate(NN *network) {
    neurons */
 /* TODO: implement check for output->input */
 int nn_connected(NN *network) {
+#ifdef DEBUG
+    assert(network);
+#endif
+
     int connected;
     
     // Check if all inputs are connected to any output
@@ -288,6 +314,11 @@ int nn_connected(NN *network) {
 /* checks weather there are a path (synapses) between the given neurons */
 /* TODO: implement check whole graph structure */
 int nn_path_between(Neuron *source, Neuron *destination) {
+#ifdef DEBUG
+    assert(source);
+    assert(destination);
+#endif
+
     Synapse *synapse;
     Neuron *neuron;
 

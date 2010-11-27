@@ -1,6 +1,11 @@
 #include "synapse.h"
-#include <stdio.h>
+
 Synapse *synapse_create(Neuron *input, Neuron *output, float diff) {
+#ifdef DEBUG
+    assert(input);
+    assert(output);
+#endif
+
     Synapse *synapse = (Synapse *)malloc(sizeof(Synapse));
     if (synapse == NULL) {
         return NULL;
@@ -13,5 +18,9 @@ Synapse *synapse_create(Neuron *input, Neuron *output, float diff) {
 }
 
 void synapse_destroy(Synapse *synapse) {
+#ifdef DEBUG
+    assert(synapse);
+#endif
+
     free(synapse);
 }

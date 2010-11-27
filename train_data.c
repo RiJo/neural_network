@@ -14,6 +14,10 @@ TD *td_create(unsigned int inputs, unsigned int outputs) {
 }
 
 void td_destroy(TD *data) {
+#ifdef DEBUG
+    assert(data);
+#endif
+
     unsigned int i;
     for (i = 0; i < data->input_count; i++) {
         free(data->input[i]);
@@ -31,9 +35,11 @@ void td_destroy(TD *data) {
 }
 
 void td_add(TD *data, float *input, float *output) {
+#ifdef DEBUG
     assert(data);
     assert(input);
     assert(output);
+#endif
 
     data->data_count++;
 

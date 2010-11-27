@@ -11,7 +11,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#ifdef DEBUG
 #include <assert.h>
+#endif
 
 typedef struct {
     float **input;

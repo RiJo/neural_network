@@ -9,10 +9,11 @@
 #ifndef _NEURON_H_
 #define _NEURON_H_
 
-#include <assert.h>
-#include <math.h>
-
 #include "synapse.h"
+#include <math.h>
+#ifdef DEBUG
+#include <assert.h>
+#endif
 
 #define BIAS_INPUT 1.0
 
