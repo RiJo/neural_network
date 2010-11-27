@@ -74,7 +74,7 @@ void neuron_set_sigmoid(Neuron *neuron, float (*custom_sigmoid)(float)) {
         neuron->sigmoid_function = sigmoid; // restore
 }
 
-/* set custom delta sigmoid function of neuron */
+/* set custom derivative sigmoid function of neuron */
 void neuron_set_dsigmoid(Neuron *neuron, float (*custom_dsigmoid)(float)) {
     if (custom_dsigmoid != NULL)
         neuron->dsigmoid_function = custom_dsigmoid;
@@ -87,7 +87,7 @@ float sigmoid(float value) {
     return tanh(value);
 }
 
-/* the default delta sigmoid function */
+/* the default derivative of sigmoid function */
 float dsigmoid(float value) {
     return 1.0 - pow(value, 2);
 }
