@@ -1,7 +1,7 @@
 CC          = gcc
 CCFLAGS     = -Wall -Werror -std=gnu99
 CCOPTS      = -O3 -march=core2 -mtune=core2
-CCDEBUG     = -g -D=_DEBUG_
+CCDEBUG     = -g -D=DEBUG
 CCPROFILE   = -pg
 LDFLAGS     = -lm
 NAME        = test
@@ -10,6 +10,7 @@ OBJS        = \
               neural_network.o          \
               neuron.o                  \
               synapse.o                 \
+              supervised.o              \
               train_data.o              \
 
 all: $(NAME)

@@ -1,9 +1,11 @@
-* Fix recursive backpropagation through all layers
-* Make it possible to create/remove synapses/neurons
-* Make it possible to cover from a damage (say a neuron is removed)
-* Support for 0 (zero) hidden layers, input directly connected to output layer
-* Fix nn_connected() according to comment
-* Make network dynamic: when learning it should add/remove synapses if necessary
-* Fix nn_generate_synapses() to not add 100% synapses (related to dynamic synapses)
-* Override transfer function (like threshold) of the neurons with a custom function pointer
-* Eliminate all assert()'s (only when DEBUG?). Replace with NULL as return values etc...
+TODO:
+ * Fix recursive backpropagation through all layers
+ * Make it possible to create/remove synapses/neurons
+ * Make it possible to cover from a damage (say a neuron is removed)
+ * Support for 0 (zero) hidden layers, input directly connected to output layer
+ * Fix nn_connected() according to comment
+ * Make network dynamic: when learning it should add/remove synapses if necessary
+ * Fix nn_generate_synapses() to not add 100% synapses (related to dynamic synapses)
+ * Override transfer function (like threshold) of the neurons with a custom function pointer
+ * Eliminate all assert()'s (only when DEBUG?). Replace with NULL as return values etc...
+ * rename output/input of neuron (cunfusion with the same values of synapse)

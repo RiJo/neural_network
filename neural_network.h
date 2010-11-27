@@ -14,18 +14,14 @@
  *    layer1:n1:layer2:n2:weight:change
  *    layer1:n1:layer2:n2:weight:change
  */
- 
- /*
-    Fixes:
-        - rename output/input of neuron (cunfusion with the same values of synapse)
-*/
 
 #ifndef _NEURAL_NETWORK_H_
 #define _NEURAL_NETWORK_H_
 
+#include <stdio.h>
+#include <string.h>
 #include <assert.h>
 #include "neuron.h"
-#include "train_data.h"
 
 #define NN_FILE_DUMP_VERSION "1.1"
 
@@ -52,8 +48,6 @@ void nn_generate_synapses(NN *);
 void nn_set_input(NN *, unsigned int, float);
 float nn_read_output(NN *, unsigned int);
 void nn_calculate(NN *);
-float nn_error_factor(NN *, TD *);
-float nn_train(NN *, TD *, float, float);
 int nn_connected(NN *);
 
 #endif

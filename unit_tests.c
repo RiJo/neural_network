@@ -1,4 +1,5 @@
 #include "neural_network.h"
+#include "supervised.h"
 
 #include <stdio.h>
 
