@@ -32,6 +32,7 @@
 --------------------------------------------------------------------------------
  version 0.2.0, xxxx-xx-xx
 --------------------------------------------------------------------------------
-    * New function: nn_connected()
-    * Ability to set custom (d)sigmoid functions
+    * New function nn_connected()
+    * Recursive supervised training through all layers
+    * Custom (d)sigmoid functions
 --------------------------------------------------------------------------------

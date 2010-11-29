@@ -1,5 +1,4 @@
 TODO:
- * Fix recursive backpropagation through all layers
  * Make it possible to create/remove synapses/neurons in a network
  * Support for 0 (zero) hidden layers, input directly connected to output layer
  * Support for synapses within same layer? Support for synapses to previous layer?

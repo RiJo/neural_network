@@ -88,6 +88,7 @@ void mirror_test() {
     unsigned int neurons[] = {2, 1, 2};
     network = nn_create(3, neurons);
     nn_generate_synapses(network);
+    nn_generate_synapses(network);
 
     // Train neural network with train data
     printf("\n  Training...\n");

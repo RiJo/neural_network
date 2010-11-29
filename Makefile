@@ -11,7 +11,6 @@ OBJS        = \
               neuron.o                  \
               synapse.o                 \
               supervised.o              \
-              train_data.o              \
 
 all: $(NAME)
 

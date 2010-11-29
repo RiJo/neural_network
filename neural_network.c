@@ -241,7 +241,7 @@ void nn_add_synapse(NN *network, unsigned int input_layer, unsigned int input_ne
 void nn_generate_synapses(NN *network) {
 #ifdef DEBUG
     assert(network);
-    assert(network->synapse_count == 0);
+    //assert(network->synapse_count == 0);
 #endif
 
     for (unsigned int layer = 1; layer < network->layer_count; layer++) {
