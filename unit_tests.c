@@ -96,7 +96,7 @@ void mirror_test() {
         (void)nn_train(network, train_data);
         if (i % 10000 == 0) {
             float current_error = nn_error_factor(network, train_data);
-            //~ assert(current_error < previous_error);
+            assert(current_error < previous_error);
             printf("    error: %f%%\n", current_error * 100);
             previous_error = current_error;
         }
@@ -209,7 +209,7 @@ int main(int argc, char **argv) {
 
     connectivity_test();
 
-    //mirror_test();
+    //~ mirror_test();
 
     printf("ALL TESTS PASSED\n");
 

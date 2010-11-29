@@ -13,9 +13,9 @@ NN *nn_create(unsigned int layers, unsigned int *neurons) {
     // allocate memory
     NN *network = (NN *)malloc(sizeof(NN));
     if (network == NULL) {
-        fprintf(stderr, "Error: could not allocate memory for neural network\n");
         return NULL;
     }
+
     network->layers = (Neuron **)malloc(sizeof(Neuron *) * layers);
     for (unsigned int layer = 0; layer < layers; layer++) {
         network->layers[layer] = (Neuron *)malloc(sizeof(Neuron) * neurons[layer]);
