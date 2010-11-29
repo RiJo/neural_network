@@ -43,17 +43,27 @@ void backpropagate_hidden(NN *network, float *previous_deltas, unsigned int laye
     Neuron *current_neuron;
     Synapse *synapse;
     float error, change;
+
+    // backpropagate
     float *deltas = (float *)malloc(sizeof(float) * network->neuron_count[layer]);
-    for (unsigned int current = 0; current < network->neuron_count[layer]; current++) {
-        current_neuron = &network->layers[layer][current];
+    //memset(deltas, '\0', sizeof(float) * network->neuron_count[layer]);
+    for (unsigned int neuron = 0; neuron < network->neuron_count[layer]; neuron++) {
+        current_neuron = &network->layers[layer][neuron];
         error = 0.0;
-        for (unsigned int previous = 0; previous < network->neuron_count[layer + 1]; previous++) {
-            error += previous_deltas[previous] * current_neuron->output; // multiply by synapse weight??? find synapse between???
+        for (unsigned int output = 0; output > current_neuron->output_count; output++) {
+            for (unsigned int previous = 0; previous < network->neuron_count[layer + 1]; previous++) { // shouldn't this loop be only connecting neurons? N<-S->N
+                if (current_neuron->outputs[output]->output == network->layers[previous])
+                    error += (previous_deltas[previous] * current_neuron->outputs[output]->weight);
+            }
         }
-        deltas[current] = error * neuron_dsigmoid(current_neuron);
+        
+        /*for (unsigned int previous = 0; previous < network->neuron_count[layer + 1]; previous++) { // shouldn't this loop be only connecting neurons? N<-S->N
+            error += (previous_deltas[previous] * current_neuron->output); // multiply by synapse weight??? find synapse between???
+        }*/
+        deltas[neuron] = error * neuron_dsigmoid(current_neuron);
         /*for (unsigned int input = 0; input < current_neuron->input_count; input++) {
             synapse = current_neuron->inputs[input];
-            change = synapse->input->output * deltas[current];
+            change = synapse->input->output * deltas[neuron];
             synapse_change(synapse, change);
         }*/
     }
@@ -61,10 +71,9 @@ void backpropagate_hidden(NN *network, float *previous_deltas, unsigned int laye
     // recurse
     backpropagate_hidden(network, deltas, layer - 1);
 
-    /* TEST */
     // update values
-    for (unsigned int current = 0; current < network->neuron_count[layer]; current++) {
-        current_neuron = &network->layers[layer][current];
+    for (unsigned int neuron = 0; neuron < network->neuron_count[layer]; neuron++) {
+        current_neuron = &network->layers[layer][neuron];
         /*error = 0.0;
         for (unsigned int previous = 0; previous < network->neuron_count[layer + 1]; previous++) {
             error += previous_deltas[previous] * current_neuron->output; // multiply by synapse weight??? find synapse between???
@@ -72,12 +81,10 @@ void backpropagate_hidden(NN *network, float *previous_deltas, unsigned int laye
         deltas[current] = error * neuron_dsigmoid(current_neuron);*/
         for (unsigned int input = 0; input < current_neuron->input_count; input++) {
             synapse = current_neuron->inputs[input];
-            change = synapse->input->output * deltas[current];
+            change = synapse->input->output * deltas[neuron];
             synapse_change(synapse, change);
         }
     }
-    /* TEST */
-
     free(deltas);
 }
 
@@ -100,36 +107,35 @@ void backpropagate_output(NN *network, TD *train_data) {
             network->layers[0][input].input = train_data->input[test][input];
         }
         nn_calculate(network);
+
         // backpropagate
         deltas = (float *)malloc(sizeof(float) * network->neuron_count[layer]);
+        //memset(deltas, '\0', sizeof(float) * network->neuron_count[layer]);
         for (unsigned int neuron = 0; neuron < network->neuron_count[layer]; neuron++) {
             current_neuron = &network->layers[layer][neuron];
             error = train_data->output[test][neuron] - current_neuron->output;
             deltas[neuron] = error * neuron_dsigmoid(current_neuron);
             /*for (unsigned int input = 0; input < current_neuron->input_count; input++) {
-                change = current_neuron->inputs[input]->input->output * deltas[neuron];
                 synapse = current_neuron->inputs[input];
+                change = synapse->input->output * deltas[neuron];
                 synapse_change(synapse, change);
             }*/
         }
+
         // recurse
         backpropagate_hidden(network, deltas, layer - 1);
-        /* TEST */
+
         // update values
         for (unsigned int neuron = 0; neuron < network->neuron_count[layer]; neuron++) {
             current_neuron = &network->layers[layer][neuron];
             /*error = train_data->output[test][neuron] - current_neuron->output;
             deltas[neuron] = error * neuron_dsigmoid(current_neuron);*/
             for (unsigned int input = 0; input < current_neuron->input_count; input++) {
-                change = current_neuron->inputs[input]->input->output * deltas[neuron];
                 synapse = current_neuron->inputs[input];
+                change = synapse->input->output * deltas[neuron];
                 synapse_change(synapse, change);
             }
         }
-        /* TEST */
-        /* should this be called before backpropagation is performed on the output
-           layer? because the output of each layer (input to next) will change. */
-        
         free(deltas);
     }
 }
@@ -139,6 +145,8 @@ float nn_train(NN *network, TD *train_data) {
 #ifdef DEBUG
     assert(network);
     assert(train_data);
+    assert(train_data->input_count == network->neuron_count[0]);
+    assert(train_data->output_count == network->neuron_count[network->layer_count - 1]);
     assert(nn_connected(network));
 #endif
 
