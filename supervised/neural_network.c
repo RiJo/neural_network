@@ -247,14 +247,14 @@ void nn_calculate(NN *network) {
     }
 }
 
-/* checks weather there are synapses between all input neurons and the output
-   neurons */
-/* TODO: implement check for output->input */
+/* checks weather there are synapses between all the input neurons and all the
+   output neurons */
 int nn_connected(NN *network) {
 #ifdef DEBUG
     assert(network);
 #endif
 
+    /* TODO: implement check for output->input */
     int connected;
     
     // Check if all inputs are connected to any output
@@ -268,6 +268,11 @@ int nn_connected(NN *network) {
         if (!connected)
             return 0;
     }
+    return 1;
+}
+
+/* checks if the network is fully connected */
+int nn_fully_connected(NN* network) {
     return 1;
 }
 
