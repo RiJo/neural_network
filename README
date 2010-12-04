@@ -35,4 +35,5 @@
     * New function nn_connected()
     * Recursive backpropagation through all layers
     * Custom (d)sigmoid functions
+    * Removed comment field from network
 --------------------------------------------------------------------------------
