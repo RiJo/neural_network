@@ -24,7 +24,6 @@ NN *nn_create(unsigned int layers, unsigned int *neurons) {
         }
     }
 
-    network->comment = NULL;
     network->layer_count = layers;
     network->synapses = NULL;
     network->synapse_count = 0;
@@ -56,8 +55,6 @@ void nn_destroy(NN *network) {
     }
     free(network->synapses);
     network->synapses = NULL;
-    free(network->comment);
-    network->comment = NULL;
 
     free(network);
 }
@@ -70,8 +67,7 @@ size_t nn_size(NN *network) {
     return (
         sizeof(NN) +
         (sizeof(Synapse) * network->synapse_count) +
-        (sizeof(Neuron) * (network->neuron_count[0] + network->neuron_count[1]+network->neuron_count[2])) +
-        ((network->comment != NULL) ? sizeof(char) * strlen(network->comment) : 0)
+        (sizeof(Neuron) * (network->neuron_count[0] + network->neuron_count[1]+network->neuron_count[2]))
     );
 }
 
@@ -84,18 +80,11 @@ NN *nn_load_from_file(FILE *file) {
 
     // parse header
     char structure[255];
-    char comment[512];
     memset(structure, '\0', 255);
-    memset(comment, '\0', 512);
     if (fscanf (file, "[NN-" NN_FILE_DUMP_VERSION "<%[0123456789:]>]\r\n", structure) != 1) {
         fprintf(stderr, "Error: invalid version of neural network dump file. Expected version: %s\n", NN_FILE_DUMP_VERSION);
         return NULL;
     }
-    if (fgets(comment, 512, file) == NULL) {
-        fprintf(stderr, "Error: invalid header, could not parse comment.\n");
-        return NULL;
-    }
-    comment[strlen(comment) - 2] = '\0';
 
     unsigned int layer_count = 0;
     for (unsigned int i = 0; i < strlen(structure); i++) {
@@ -118,9 +107,6 @@ NN *nn_load_from_file(FILE *file) {
     if (network == NULL) {
         return NULL;
     }
-    network->comment = (char *)malloc(sizeof(char) * (strlen(comment) + 1));
-    strcpy(network->comment, comment);
-    network->comment[strlen(comment)] = '\0';
     network->layer_count = layer_count;
     unsigned int layer1, layer2, neuron1, neuron2;
     float weight, change;
@@ -157,12 +143,6 @@ void nn_dump_to_file(NN *network, FILE *file) {
         sprintf(&structure[strlen(structure)], ":%d", network->neuron_count[i]);
     }
     fprintf(file, "[NN-%s<%s>]\r\n", NN_FILE_DUMP_VERSION, structure);
-    if (network->comment != NULL) {
-        fprintf(file, "%s\r\n", network->comment);
-    }
-    else {
-        fprintf(file, "(no comment)\r\n");
-    }
 
     // write data
     Synapse *synapse;
@@ -184,26 +164,6 @@ void nn_dump_to_file(NN *network, FILE *file) {
         }
         fprintf(file, "%d:%d:%d:%d:%f:%f\r\n", layer1, neuron1, layer2, neuron2, synapse->weight, synapse->change);
     }
-}
-
-/* Sets the comment field in the neural network which is used when dumping the
- * structure to a file */
-void nn_set_comment(NN *network, const char *comment) {
-#ifdef DEBUG
-    assert(network);
-    assert(comment);
-#endif
-
-    if (network->comment != NULL) {
-        free(network->comment);
-        network->comment = NULL;
-    }
-    network->comment = (char *)malloc(sizeof(char) * (strlen(comment) + 1));
-    if (network->comment == NULL) {
-        fprintf(stderr, "Error: could not allocate memory for neural network comment\n");
-        return;
-    }
-    strcpy(network->comment, comment);
 }
 
 /* Generates a synapse between the given neurons */

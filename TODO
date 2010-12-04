@@ -1,8 +1,12 @@
 TODO:
+ * Fix nn_connected() according to comment
+ * implement nn_fully_connected()
+ * rename output/input of neuron (confusion with the same values of synapse)
+ * make sure nn_size() returns correct value if different number of layers is picked
+
+IDEAS:
  * Make it possible to create/remove synapses/neurons in a network
  * Support for 0 (zero) hidden layers, input directly connected to output layer
  * Support for synapses within same layer? Support for synapses to previous layer?
- * Fix nn_connected() according to comment
  * Make network dynamic: when learning it should add/remove synapses if necessary
  * Fix nn_generate_synapses() to not add 100% synapses (related to dynamic synapses), rename to sometihng else?
- * rename output/input of neuron (confusion with the same values of synapse)

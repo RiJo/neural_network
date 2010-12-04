@@ -61,8 +61,6 @@ int main(int argc, char **argv) {
 
         unsigned int neurons[] = {2, 5, 2};
         network = nn_create(3, neurons);
-        network->comment = (char *)malloc(sizeof(char) * strlen("this is a comment") + 1);
-        strcpy(network->comment, "this is a comment");
 
         printf("Network inputs: %d   hidden: %d   outputs: %d\n\n", network->neuron_count[0], network->neuron_count[1], network->neuron_count[2]);
         
@@ -111,7 +109,7 @@ int main(int argc, char **argv) {
             exit(EXIT_FAILURE);
         }
 
-        printf("Neural network loaded: \"%s\"\n", network->comment);
+        printf("Neural network loaded\n");
 
         printf("\nResults of loaded network:");
         show_results(network, train_data);

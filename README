@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------------
 
-    Neural Network
+    Multilayer perceptron (MLP)
 
     Current version:     0.1.0
     Author:              Rikard Johansson
@@ -33,6 +33,6 @@
  version 0.2.0, xxxx-xx-xx
 --------------------------------------------------------------------------------
     * New function nn_connected()
-    * Recursive supervised training through all layers
+    * Recursive backpropagation through all layers
     * Custom (d)sigmoid functions
 --------------------------------------------------------------------------------

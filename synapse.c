@@ -35,5 +35,7 @@ void synapse_change(Synapse *synapse, float value) {
 #endif
 
     synapse->weight += (value * synapse->learn_rate) + (synapse->change * synapse->momentum);
+    //if (synapse->weight  < 0.0) // TODO: is it correct to place it here?
+    //    synapse->weight = 0.0; // TODO: synapse should be removed from network...
     synapse->change = value;
 }

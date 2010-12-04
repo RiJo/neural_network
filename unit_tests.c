@@ -4,7 +4,6 @@
 #include <stdio.h>
 
 #define DUMP_FILE "test.dmp"
-#define COMMENT "this is a test comment"
 
 #define LAYER_COUNT 3
 #define NEURON_COUNT_INPUT 2
@@ -143,10 +142,6 @@ int main(int argc, char **argv) {
     test_announce("network synapse count");
     assert(network->synapse_count == SYNAPSE_COUNT);
 
-    nn_set_comment(network, COMMENT);
-    test_announce("network comment is set");
-    assert(network->comment);
-
     // Train neural network with train data
     test_announce("learning rate");
     float previous_error = 1.0;
@@ -184,7 +179,6 @@ int main(int argc, char **argv) {
     for (unsigned int i = 0; i < network->layer_count; i++) {
         assert(network->neuron_count[i] == loaded->neuron_count[i]);
     }
-    assert(strcmp(network->comment, loaded->comment) == 0);
 
     assert(
         nn_error_factor(loaded, train_data) > nn_error_factor(network, train_data) - ERROR_TOLERANCE &&
