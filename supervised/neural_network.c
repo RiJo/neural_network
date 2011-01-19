@@ -55,13 +55,18 @@ void nn_destroy(NN *network) {
     free(network);
 }
 
+/* Calculates how many bytes the neural network data structure allocates */
 size_t nn_size(NN *network) {
     ASSERT(network);
+
+    size_t neurons_size = 0;
+    for (unsigned int layer = 0; layer < network->layer_count; layer++)
+        neurons_size += (sizeof(Neuron) * network->neuron_count[layer]);
 
     return (
         sizeof(NN) +
         (sizeof(Synapse) * network->synapse_count) +
-        (sizeof(Neuron) * (network->neuron_count[0] + network->neuron_count[1]+network->neuron_count[2]))
+        neurons_size
     );
 }
 

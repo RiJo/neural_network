@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
 
     if (argc == 1) {
         printf("\n################################################################################\n");
-        printf("Creating new neural network\n");
+        printf("Creating new neural network...\n");
 
         unsigned int neurons[] = {2, 5, 2};
         network = nn_create(3, neurons);
@@ -65,10 +65,11 @@ int main(int argc, char **argv) {
         printf("Network inputs: %d   hidden: %d   outputs: %d\n\n", network->neuron_count[0], network->neuron_count[1], network->neuron_count[2]);
         
         printf("Network is connected: %d\n", nn_connected(network));
-        printf("Generating synapses\n");
+        printf("Generating synapses...\n");
         nn_generate_synapses(network);
-        printf("Network synapses: %d\n", network->synapse_count);
-        printf("Network is connected: %d\n\n", nn_connected(network));
+        printf("Network synapses: %d\n\n", network->synapse_count);
+
+        printf("Size of network: %d bytes\n\n", (int)nn_size(network));
 
         printf("Results before training:");
         show_results(network, train_data);

@@ -2,7 +2,6 @@ TODO:
  * Fix nn_connected() according to comment
  * implement nn_fully_connected()
  * rename output/input of neuron (confusion with the same values of synapse)
- * make sure nn_size() returns correct value if different number of layers is picked
 
 IDEAS:
  * Make it possible to create/remove synapses/neurons in a network
