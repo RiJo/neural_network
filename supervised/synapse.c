@@ -1,10 +1,8 @@
 #include "synapse.h"
 
 Synapse *synapse_create(Neuron *input, Neuron *output, float diff) {
-#ifdef DEBUG
-    assert(input);
-    assert(output);
-#endif
+    ASSERT(input);
+    ASSERT(output);
 
     Synapse *synapse = (Synapse *)malloc(sizeof(Synapse));
     if (synapse == NULL) {
@@ -22,17 +20,13 @@ Synapse *synapse_create(Neuron *input, Neuron *output, float diff) {
 }
 
 void synapse_destroy(Synapse *synapse) {
-#ifdef DEBUG
-    assert(synapse);
-#endif
+    ASSERT(synapse);
 
     free(synapse);
 }
 
 void synapse_change(Synapse *synapse, float value) {
-#ifdef DEBUG
-    assert(synapse);
-#endif
+    ASSERT(synapse);
 
     synapse->weight += (value * synapse->learn_rate) + (synapse->change * synapse->momentum);
     //if (synapse->weight  < 0.0) // TODO: is it correct to place it here?

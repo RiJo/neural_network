@@ -6,10 +6,8 @@ void backpropagate_hidden(NN *, float *, unsigned int);
 
 /* Returns the current error factor of the neural network */
 float nn_error_factor(NN *network, TD *train_data) {
-#ifdef DEBUG
-    assert(network);
-    assert(train_data);
-#endif
+    ASSERT(network);
+    ASSERT(train_data);
 
     float error = 0.0;
     float test_error;
@@ -31,10 +29,8 @@ float nn_error_factor(NN *network, TD *train_data) {
 
 /* Backpropagates the network hidden layers recursively */
 void backpropagate_hidden(NN *network, float *previous_deltas, unsigned int layer) {
-#ifdef DEBUG
-    assert(network);
-    assert(previous_deltas);
-#endif
+    ASSERT(network);
+    ASSERT(previous_deltas);
 
     if (layer == 0) {
         return; // base case
@@ -75,10 +71,8 @@ void backpropagate_hidden(NN *network, float *previous_deltas, unsigned int laye
 
 /* Backpropagates the network outputs */
 void backpropagate_output(NN *network, TD *train_data) {
-#ifdef DEBUG
-    assert(network);
-    assert(train_data);
-#endif
+    ASSERT(network);
+    ASSERT(train_data);
 
     unsigned int layer = network->layer_count - 1;
 
@@ -119,13 +113,11 @@ void backpropagate_output(NN *network, TD *train_data) {
 
 /* train the neural network with the defined data */
 float nn_train(NN *network, TD *train_data) {
-#ifdef DEBUG
-    assert(network);
-    assert(train_data);
-    assert(train_data->input_count == network->neuron_count[0]);
-    assert(train_data->output_count == network->neuron_count[network->layer_count - 1]);
-    assert(nn_connected(network));
-#endif
+    ASSERT(network);
+    ASSERT(train_data);
+    ASSERT(train_data->input_count == network->neuron_count[0]);
+    ASSERT(train_data->output_count == network->neuron_count[network->layer_count - 1]);
+    ASSERT(nn_connected(network));
 
     float error = nn_error_factor(network, train_data);
     backpropagate_output(network, train_data);
@@ -146,9 +138,7 @@ TD *td_create(unsigned int inputs, unsigned int outputs) {
 }
 
 void td_destroy(TD *data) {
-#ifdef DEBUG
-    assert(data);
-#endif
+    ASSERT(data);
 
     unsigned int i;
     for (i = 0; i < data->input_count; i++) {
@@ -167,11 +157,9 @@ void td_destroy(TD *data) {
 }
 
 void td_add(TD *data, float *input, float *output) {
-#ifdef DEBUG
-    assert(data);
-    assert(input);
-    assert(output);
-#endif
+    ASSERT(data);
+    ASSERT(input);
+    ASSERT(output);
 
     data->data_count++;
 

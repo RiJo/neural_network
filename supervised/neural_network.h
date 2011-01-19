@@ -21,8 +21,14 @@
 #include "neuron.h"
 #include <stdio.h>
 #include <string.h>
-#ifdef DEBUG
+
+#ifdef _DEBUG_
 #include <assert.h>
+#define ASSERT assert
+#define DEBUG printf("[debug] ");printf
+#else
+#define ASSERT(arg1,...)
+#define DEBUG(arg1,...)
 #endif
 
 #define NN_FILE_DUMP_VERSION "1.1"

@@ -1,7 +1,7 @@
 CC          = gcc
 CCFLAGS     = -Wall -Werror -std=gnu99
 CCOPTS      = -O3 -march=core2 -mtune=core2
-CCDEBUG     = -g -D=DEBUG
+CCDEBUG     = -g -D=_DEBUG_
 CCPROFILE   = -pg
 LDFLAGS     = -lm
 NAME        = test

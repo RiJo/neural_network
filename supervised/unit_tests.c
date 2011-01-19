@@ -2,6 +2,7 @@
 #include "supervised.h"
 
 #include <stdio.h>
+#include <assert.h>
 
 #define DUMP_FILE "test.dmp"
 

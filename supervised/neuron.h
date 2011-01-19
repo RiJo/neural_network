@@ -11,8 +11,14 @@
 
 #include "synapse.h"
 #include <math.h>
-#ifdef DEBUG
+
+#ifdef _DEBUG_
 #include <assert.h>
+#define ASSERT assert
+#define DEBUG printf("[debug] ");printf
+#else
+#define ASSERT(arg1,...)
+#define DEBUG(arg1,...)
 #endif
 
 #define BIAS_INPUT 1.0

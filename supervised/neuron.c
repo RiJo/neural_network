@@ -5,9 +5,7 @@ float sigmoid(float);
 float dsigmoid(float);
 
 void neuron_init(Neuron *neuron) {
-#ifdef DEBUG
-    assert(neuron);
-#endif
+    ASSERT(neuron);
 
     neuron->input = 0.0;
     neuron->output = 0.0;
@@ -23,9 +21,7 @@ void neuron_init(Neuron *neuron) {
 /* This function differ from other *_destroy(), because it does not free the
    given parameter. Either fix it to handle it, or rename the function. */
 void neuron_destroy(Neuron *neuron) {
-#ifdef DEBUG
-    assert(neuron);
-#endif
+    ASSERT(neuron);
 
     free(neuron->inputs);
     neuron->inputs = NULL;
@@ -39,9 +35,7 @@ void neuron_destroy(Neuron *neuron) {
 
 /* calculates the (input) value of the neuron */
 float neuron_value(Neuron *neuron) {
-#ifdef DEBUG
-    assert(neuron);
-#endif
+    ASSERT(neuron);
 
     Synapse *synapse;
     float value = neuron->bias;
@@ -55,9 +49,7 @@ float neuron_value(Neuron *neuron) {
 /* produce the output value of the neuron. If it is an input neuron then the
    output value becomes its input value */
 void neuron_fire(Neuron *neuron) {
-#ifdef DEBUG
-    assert(neuron);
-#endif
+    ASSERT(neuron);
 
     if (neuron->input_count == 0) {
         neuron->output = neuron->input;
@@ -70,29 +62,23 @@ void neuron_fire(Neuron *neuron) {
 
 /* the transfer function */
 float neuron_sigmoid(Neuron *neuron) {
-#ifdef DEBUG
-    assert(neuron);
-    assert(neuron->sigmoid_function);
-#endif
+    ASSERT(neuron);
+    ASSERT(neuron->sigmoid_function);
 
     return neuron->sigmoid_function(neuron->input);
 }
 
 /* derivative of the sigmoid function */
 float neuron_dsigmoid(Neuron *neuron) {
-#ifdef DEBUG
-    assert(neuron);
-    assert(neuron->dsigmoid_function);
-#endif
+    ASSERT(neuron);
+    ASSERT(neuron->dsigmoid_function);
 
     return neuron->dsigmoid_function(neuron->output);
 }
 
 /* set custom sigmoid function of neuron */
 void neuron_set_sigmoid(Neuron *neuron, float (*custom_sigmoid)(float)) {
-#ifdef DEBUG
-    assert(neuron);
-#endif
+    ASSERT(neuron);
 
     if (custom_sigmoid != NULL)
         neuron->sigmoid_function = custom_sigmoid;
@@ -102,9 +88,7 @@ void neuron_set_sigmoid(Neuron *neuron, float (*custom_sigmoid)(float)) {
 
 /* set custom derivative sigmoid function of neuron */
 void neuron_set_dsigmoid(Neuron *neuron, float (*custom_dsigmoid)(float)) {
-#ifdef DEBUG
-    assert(neuron);
-#endif
+    ASSERT(neuron);
 
     if (custom_dsigmoid != NULL)
         neuron->dsigmoid_function = custom_dsigmoid;

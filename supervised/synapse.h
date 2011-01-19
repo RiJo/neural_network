@@ -8,8 +8,14 @@
 #define _SYNAPSE_H_
 
 #include <stdlib.h>
-#ifdef DEBUG
+
+#ifdef _DEBUG_
 #include <assert.h>
+#define ASSERT assert
+#define DEBUG printf("[debug] ");printf
+#else
+#define ASSERT(arg1,...)
+#define DEBUG(arg1,...)
 #endif
 
 typedef struct Neuron Neuron; // forward declaration

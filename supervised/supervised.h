@@ -9,8 +9,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#ifdef DEBUG
+
+#ifdef _DEBUG_
 #include <assert.h>
+#define ASSERT assert
+#define DEBUG printf("[debug] ");printf
+#else
+#define ASSERT(arg1,...)
+#define DEBUG(arg1,...)
 #endif
 
 // train data
