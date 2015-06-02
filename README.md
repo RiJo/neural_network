@@ -9,6 +9,9 @@ This project contains some different implementations of neural networks.
 - Multilayer perceptron (MLP)
 	- This is a supervised learning neural network. 
 	- It contains several layers of neurones where all layers are connected by synapses.
+- Built to make learning and comprehension of foreign data types easier.
+
+>This project was originally developed for a university project where the purpose was to identity a coffee cup in an image captured by a mounted camera on a moving robot. We ran the image through some filters to get the contours which were converted into a polygon and passed to the neural network. I wanted to train the network on my computer to make loading time more efficient on an embedded device (which is the reason for a simple dump and load textile)
 
 ####Reinforcement Learning
 **Progress: 0%**
