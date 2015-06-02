@@ -2,14 +2,17 @@
 This project contains some different implementations of neural networks.
 
 ####Author(s)
-- [Rikard Johansson](https://github.com/RiJo) 
+- [Rikard Johansson](https://github.com/RiJo)
 
 ####Supervised Learning
-- Multilayer perceptron (MLP)		|		Progress: 100%
-	- This is a supervised learning neural network. It contains several layers of neurones where all layers are connected by synapses.
+**Progress: 100%**
+- Multilayer perceptron (MLP)
+	- This is a supervised learning neural network. 
+	- It contains several layers of neurones where all layers are connected by synapses.
 
 ####Reinforcement Learning
-- Markov decision process (MDP)		|		Progress: 0%
+**Progress: 0%**
+- Markov decision process (MDP)
 	- This is a reinforcement learning neural network.
 
 ##Roadmap
