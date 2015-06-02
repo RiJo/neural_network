@@ -1,7 +1,7 @@
 #neural_network
 This project contains some different implementations of neural networks.
 
-####Author(s)
+###Author(s)
 - [Rikard Johansson](https://github.com/RiJo)
 
 ####Supervised Learning
