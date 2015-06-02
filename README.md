@@ -10,10 +10,11 @@ This project contains some different implementations of neural networks.
 	- This is a supervised learning neural network. 
 	- It contains several layers of neurones where all layers are connected by synapses.
 - Built to make learning and comprehension of foreign data types easier.
-- Train network(s) using backward propagation. (only output layer)
-- Dump sample(s) into a textfile.
-- Load sample(s) from a textfile.
-- Comment field to make distinction between network dumps.
+- Features
+	- Train neurone network(s) using backward propagation. (only output layer)
+	- Dump neurone network(s) into a textfile.
+	- Load neurone network(s) from a textfile.
+	- Comment field to make distinction between network dumps.
 
 >This project was originally developed for a university project where the purpose was to identity a coffee cup in an image captured by a mounted camera on a moving robot. We ran the image through some filters to get the contours which were converted into a polygon and passed to the neural network. I wanted to train the network on my computer to make loading time more efficient on an embedded device. (which is the reason for a simple dump and load textile)
 
